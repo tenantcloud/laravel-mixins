@@ -11,7 +11,7 @@ parameters:
 
 	ignoreErrors:
 		-
-			message: '#Call to protected method .+#i'
+			message: '#Call to an undefined .+#i'
 			path: '*Mixin.php'
 		-
 			message: '#Access to protected property .+Mixin::.+#i'
