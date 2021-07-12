@@ -2,8 +2,8 @@
 
 namespace Tests\CollectionMixin;
 
-use TenantCloud\Mixins\CollectionMixin;
 use Illuminate\Support\Collection;
+use TenantCloud\Mixins\CollectionMixin;
 use Tests\TestCase;
 
 /**

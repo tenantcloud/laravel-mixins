@@ -2,8 +2,8 @@
 
 namespace Tests\ArrMixin;
 
-use TenantCloud\Mixins\ArrMixin;
 use Illuminate\Support\Arr;
+use TenantCloud\Mixins\ArrMixin;
 use Tests\TestCase;
 
 /**

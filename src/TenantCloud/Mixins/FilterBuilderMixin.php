@@ -6,6 +6,8 @@ use ScoutElastic\Builders\FilterBuilder;
 
 /**
  * @mixin FilterBuilder
+ *
+ * Needs to be registered manually
  */
 class FilterBuilderMixin
 {

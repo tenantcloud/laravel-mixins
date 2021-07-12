@@ -4,6 +4,7 @@ namespace TenantCloud\Mixins;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Tests\ArrMixin\ArrSelectTest;
 
 /**
  * @mixin Arr
@@ -32,6 +33,8 @@ class ArrMixin
 	}
 
 	/**
+	 * @see ArrSelectTest
+	 *
 	 * Selects specified keys from the input array
 	 * using dot notation and wildcards. Example:
 	 *

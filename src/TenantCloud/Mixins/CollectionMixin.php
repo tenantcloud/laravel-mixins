@@ -3,8 +3,8 @@
 namespace TenantCloud\Mixins;
 
 use Illuminate\Support\Collection;
-use Tests\Backend\Unit\Macro\CollectionSortByMultiTest;
-use Tests\Backend\Unit\Macro\CollectionUngroupTest;
+use Tests\CollectionMixin\CollectionSortByMultiTest;
+use Tests\CollectionMixin\CollectionUngroupTest;
 
 /**
  * @mixin Collection
