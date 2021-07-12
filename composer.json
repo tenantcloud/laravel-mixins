@@ -3,6 +3,12 @@
 	"description": "A collection of laravel mixins",
 	"minimum-stability": "stable",
 	"license": "MIT",
+	"authors": [
+		{
+			"name": "Team Tenantcloud",
+			"email": "info@tenantcloud.com"
+		}
+	],
 	"require": {
 		"php": ">=7.4 || ^8.0",
 		"illuminate/database": "^8.0",
