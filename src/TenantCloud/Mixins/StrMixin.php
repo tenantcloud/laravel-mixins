@@ -5,8 +5,8 @@ namespace TenantCloud\Mixins;
 use Closure;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
-use Tests\Backend\Unit\Macro\StrExtractApostrophesTest;
-use Tests\Backend\Unit\Macro\StrTrimInsideTest;
+use Tests\StrMixin\StrExtractApostrophesTest;
+use Tests\StrMixin\StrTrimInsideTest;
 
 /**
  * @mixin Str
