@@ -1,11 +1,9 @@
 <?php
 
-
 namespace Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use TenantCloud\Providers\MixinsServiceProvider;
-
 
 class TestCase extends BaseTestCase
 {

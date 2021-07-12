@@ -2,8 +2,8 @@
 
 namespace Tests\StrMixin;
 
-use TenantCloud\Mixins\StrMixin;
 use Illuminate\Support\Str;
+use TenantCloud\Mixins\StrMixin;
 use Tests\TestCase;
 
 /**

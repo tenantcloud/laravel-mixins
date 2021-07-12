@@ -10,5 +10,12 @@ parameters:
 		- tests
 
 	ignoreErrors:
-		# There's no extension for that :(
-		- '#Call to an undefined method Pest\\Expectations\\Expectation|Pest\\Expectations\\Support\\Extendable::#i'
+		-
+			message: '#Call to protected method .+#i'
+			path: '*Mixin.php'
+		-
+			message: '#Access to protected property .+Mixin::.+#i'
+			path: '*Mixin.php'
+		-
+			message: '#Method .+Mixin::.+ invoked with \d parameters, 0 required.#i'
+			path: '*Mixin.php'
