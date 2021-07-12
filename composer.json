@@ -1,6 +1,6 @@
 {
-	"name": "tenantcloud/composer-package",
-	"description": "A template for composer packages",
+	"name": "tenantcloud/laravel-mixins",
+	"description": "A collection of laravel mixins",
 	"minimum-stability": "stable",
 	"license": "MIT",
 	"require": {
