@@ -7,11 +7,13 @@ parameters:
 
 	paths:
 		- src
-		- tests
 
 	ignoreErrors:
 		-
 			message: '#Call to an undefined .+#i'
+			path: '*Mixin.php'
+		-
+			message: '#Call to protected method .+#i'
 			path: '*Mixin.php'
 		-
 			message: '#Access to protected property .+Mixin::.+#i'
