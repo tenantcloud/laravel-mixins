@@ -37,7 +37,7 @@
 	"extra": {
 		"laravel": {
 			"providers": [
-				"TenantCloud\\Providers\\MixinsServiceProvider"
+				"TenantCloud\\MixinsServiceProvider"
 			]
 		}
 	}

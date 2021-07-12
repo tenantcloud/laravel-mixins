@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Providers;
+namespace TenantCloud;
 
 use Carbon\Carbon;
 use Illuminate\Auth\RequestGuard;
