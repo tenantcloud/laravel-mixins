@@ -48,5 +48,6 @@ class MixinsServiceProvider extends ServiceProvider
 		EloquentBuilder::macro('customWhereNested', (new EloquentBuilderMixin())->customWhereNested());
 		EloquentBuilder::macro('conditionalUpdate', (new EloquentBuilderMixin())->conditionalUpdate());
 		EloquentBuilder::macro('toRawSql', (new EloquentBuilderMixin())->toRawSql());
+		EloquentBuilder::macro('chunkWithQueue', (new EloquentBuilderMixin())->chunkWithQueue());
 	}
 }

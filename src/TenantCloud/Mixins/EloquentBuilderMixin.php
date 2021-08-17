@@ -7,6 +7,8 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use TenantCloud\Jobs\ChunkGenerator;
+use TenantCloud\Jobs\ChunkWorkerContract;
 use Webmozart\Assert\Assert;
 
 /**
@@ -245,6 +247,31 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			$this->getQuery()->selectCaseIn($column, $groupedIds, $alias);
 
 			return $this;
+		};
+	}
+
+	/**
+	 * Same as chunkById for large tables. Split table into small piece and fire @see ChunkWorkerContract job for each of them.
+	 *
+	 * Example usage:
+	 *
+	 * $query->chunkWithQueue(ChunkWorkerContract::class, 1000, 'id')
+	 */
+	public function chunkWithQueue(): callable
+	{
+		return function (string $job, int $pieceSize = ChunkGenerator::CHUNK_PIECE, string $keyName = 'id') {
+			/* @var Builder $query */
+			$query = clone $this;
+
+			$maxKeyValue = $query->select([$keyName])->orderBy($keyName, 'desc')->get()->{$keyName};
+
+			$maxChunkNumber = intdiv($maxKeyValue, $pieceSize) + 1;
+
+			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
+				dispatch(new ChunkGenerator($job, $chunkNumber, $pieceSize));
+			}
+
+			return true;
 		};
 	}
 }
