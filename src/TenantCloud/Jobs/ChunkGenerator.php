@@ -2,13 +2,13 @@
 
 namespace TenantCloud\Jobs;
 
-use AnourValar\EloquentSerialize\Service;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Laravie\SerializesQuery\Eloquent;
 
 class ChunkGenerator implements ShouldQueue
 {
@@ -37,13 +37,13 @@ class ChunkGenerator implements ShouldQueue
 		$minKeyValue = ($this->chunkNumber - 1) * $this->params->pieceSize;
 		$maxKeyValue = $this->chunkNumber * $this->params->pieceSize - 1;
 
-		$builder = app(Service::class)->unserialize($this->serializedBuilder);
+		$builder = Eloquent::unserialize($this->serializedBuilder);
 
 		$builder
 			->whereBetween($this->params->key, [$minKeyValue, $maxKeyValue])
 			->chunkById($this->params->chunkSize, function ($items) {
 				/* @var Collection $items */
-				dispatch(new ChunkWorker($this->serializedBuilder, $this->params, $items->pluck($this->params->key)->toArray()));
+				dispatch(new ChunkWorker($items, $this->params->handler));
 			});
 	}
 }

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Laravie\SerializesQuery\Eloquent;
+use Illuminate\Support\Collection;
 
 class ChunkWorker implements ShouldQueue
 {
@@ -18,24 +18,20 @@ class ChunkWorker implements ShouldQueue
 
 	public const CHUNK_SIZE = 15;
 
-	protected array $serializedBuilder;
+	protected Collection $items;
 
-	protected ChunkParams $params;
+	protected string $handler;
 
 	protected array $keyValues;
 
-	public function __construct(array $serializedBuilder, ChunkParams $params, array $keyValues)
+	public function __construct(Collection $items, string $handler)
 	{
-		$this->serializedBuilder = $serializedBuilder;
-		$this->params = $params;
-		$this->keyValues = $keyValues;
+		$this->items = $items;
+		$this->handler = $handler;
 	}
 
 	public function handle(): void
 	{
-		$builder = Eloquent::unserialize($this->serializedBuilder);
-		$items = $builder->whereIn($this->params->key, $this->keyValues)->get();
-
-		(new $this->params->handler())->handle($items);
+		(new $this->handler())->handle($this->items);
 	}
 }
