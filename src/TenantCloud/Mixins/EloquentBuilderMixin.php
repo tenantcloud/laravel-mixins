@@ -262,13 +262,9 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
-		return function (string $handler, ?int $chunkSize = ChunkWorker::CHUNK_SIZE, ?int $pieceSize = ChunkGenerator::CHUNK_PIECE, ?string $keyName = 'id') {
+		return function (string $handler, int $chunkSize = ChunkWorker::CHUNK_SIZE, int $pieceSize = ChunkGenerator::CHUNK_PIECE, string $keyName = 'id') {
 			/* @var Builder $query */
 			$query = clone $this;
-
-			$pieceSize = $pieceSize ?: ChunkGenerator::CHUNK_PIECE;
-			$chunkSize = $chunkSize ?: ChunkWorker::CHUNK_SIZE;
-			$keyName = $keyName ?: 'id';
 
 			Assert::classExists($handler);
 			Assert::isInstanceOf(new $handler(), ChunkWorkerContract::class);

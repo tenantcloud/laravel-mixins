@@ -33,7 +33,7 @@ class ChunkWorker implements ShouldQueue
 
 	public function handle(): void
 	{
-		$builder = app(Service::class);
+		$builder = app(Service::class)->unserialize($this->serializedBuilder);
 		$items = $builder->whereIn($this->params->key, $this->keyValues)->get();
 
 		(new $this->params->handler())->handle($items);
