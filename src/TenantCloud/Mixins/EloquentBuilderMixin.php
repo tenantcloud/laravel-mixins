@@ -2,6 +2,7 @@
 
 namespace TenantCloud\Mixins;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -263,7 +264,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			/* @var Builder $query */
 			$query = clone $this;
 
-			$maxKeyValue = $query->select([$keyName])->orderBy($keyName, 'desc')->get()->{$keyName};
+			$maxKeyValue = $query->select([$keyName])->orderBy($keyName, 'desc')->first()->{$keyName};
 
 			$maxChunkNumber = intdiv($maxKeyValue, $pieceSize) + 1;
 
