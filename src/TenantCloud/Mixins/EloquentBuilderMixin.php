@@ -2,6 +2,7 @@
 
 namespace TenantCloud\Mixins;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -259,16 +260,27 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
-		return function (string $job, int $pieceSize = ChunkGenerator::CHUNK_PIECE, string $keyName = 'id') {
+		return function (string $job, ?int $pieceSize = ChunkGenerator::CHUNK_PIECE, ?string $keyName = 'id', bool $dispatchSync = false) {
 			/* @var Builder $query */
 			$query = clone $this;
 
-			$maxKeyValue = $query->select([$keyName])->orderBy($keyName, 'desc')->first()->{$keyName};
+			$pieceSize = $pieceSize ?: ChunkGenerator::CHUNK_PIECE;
+			$keyName = $keyName ?: 'id';
+
+			$maxKeyValue = optional($query->select([$keyName])->orderBy($keyName, 'desc')->first())->{$keyName};
+
+			if (!$maxKeyValue) {
+				return true;
+			}
 
 			$maxChunkNumber = intdiv($maxKeyValue, $pieceSize) + 1;
 
 			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new ChunkGenerator($job, $chunkNumber, $pieceSize));
+				if ($dispatchSync) {
+					app(Dispatcher::class)->dispatchSync($job);
+				} else {
+					dispatch(new ChunkGenerator($job, $chunkNumber, $pieceSize));
+				}
 			}
 
 			return true;
