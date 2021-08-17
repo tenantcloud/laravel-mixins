@@ -19,13 +19,13 @@ class ChunkGenerator implements ShouldQueue
 
 	public const CHUNK_PIECE = 1000;
 
-	protected string $serializedBuilder;
+	protected array $serializedBuilder;
 
 	protected ChunkParams $params;
 
 	protected int $chunkNumber;
 
-	public function __construct(string $serializedBuilder, ChunkParams $params, int $chunkNumber)
+	public function __construct(array $serializedBuilder, ChunkParams $params, int $chunkNumber)
 	{
 		$this->serializedBuilder = $serializedBuilder;
 		$this->params = $params;

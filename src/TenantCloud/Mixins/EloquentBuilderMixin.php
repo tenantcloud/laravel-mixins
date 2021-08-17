@@ -2,12 +2,12 @@
 
 namespace TenantCloud\Mixins;
 
-use AnourValar\EloquentSerialize\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Laravie\SerializesQuery\Eloquent;
 use TenantCloud\Jobs\ChunkGenerator;
 use TenantCloud\Jobs\ChunkParams;
 use TenantCloud\Jobs\ChunkWorker;
@@ -285,7 +285,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			);
 
 			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new ChunkGenerator(app(Service::class)->serialize($query), $params, $chunkNumber));
+				dispatch(new ChunkGenerator(Eloquent::serialize($query), $params, $chunkNumber));
 			}
 
 			return true;

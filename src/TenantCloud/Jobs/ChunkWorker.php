@@ -2,12 +2,12 @@
 
 namespace TenantCloud\Jobs;
 
-use AnourValar\EloquentSerialize\Service;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Laravie\SerializesQuery\Eloquent;
 
 class ChunkWorker implements ShouldQueue
 {
@@ -18,13 +18,13 @@ class ChunkWorker implements ShouldQueue
 
 	public const CHUNK_SIZE = 15;
 
-	protected string $serializedBuilder;
+	protected array $serializedBuilder;
 
 	protected ChunkParams $params;
 
 	protected array $keyValues;
 
-	public function __construct(string $serializedBuilder, ChunkParams $params, array $keyValues)
+	public function __construct(array $serializedBuilder, ChunkParams $params, array $keyValues)
 	{
 		$this->serializedBuilder = $serializedBuilder;
 		$this->params = $params;
@@ -33,7 +33,7 @@ class ChunkWorker implements ShouldQueue
 
 	public function handle(): void
 	{
-		$builder = app(Service::class)->unserialize($this->serializedBuilder);
+		$builder = Eloquent::unserialize($this->serializedBuilder);
 		$items = $builder->whereIn($this->params->key, $this->keyValues)->get();
 
 		(new $this->params->handler())->handle($items);
