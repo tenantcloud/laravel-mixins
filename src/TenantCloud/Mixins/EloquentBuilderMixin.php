@@ -2,7 +2,6 @@
 
 namespace TenantCloud\Mixins;
 
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -277,7 +276,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
 				if ($dispatchSync) {
-					app(Dispatcher::class)->dispatchSync($job);
+					dispatch_now(new ChunkGenerator($job, $chunkNumber, $pieceSize));
 				} else {
 					dispatch(new ChunkGenerator($job, $chunkNumber, $pieceSize));
 				}
