@@ -2,12 +2,15 @@
 
 namespace TenantCloud\Mixins;
 
+use AnourValar\EloquentSerialize\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use TenantCloud\Jobs\ChunkGenerator;
+use TenantCloud\Jobs\ChunkParams;
+use TenantCloud\Jobs\ChunkWorker;
 use TenantCloud\Jobs\ChunkWorkerContract;
 use Webmozart\Assert\Assert;
 
@@ -259,12 +262,16 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
-		return function (string $job, ?int $pieceSize = ChunkGenerator::CHUNK_PIECE, ?string $keyName = 'id', bool $dispatchSync = false) {
+		return function (string $handler, ?int $chunkSize = ChunkWorker::CHUNK_SIZE, ?int $pieceSize = ChunkGenerator::CHUNK_PIECE, ?string $keyName = 'id') {
 			/* @var Builder $query */
 			$query = clone $this;
 
 			$pieceSize = $pieceSize ?: ChunkGenerator::CHUNK_PIECE;
+			$chunkSize = $chunkSize ?: ChunkWorker::CHUNK_SIZE;
 			$keyName = $keyName ?: 'id';
+
+			Assert::classExists($handler);
+			Assert::isInstanceOf(new $handler(), ChunkWorkerContract::class);
 
 			$maxKeyValue = optional($query->select([$keyName])->orderBy($keyName, 'desc')->first())->{$keyName};
 
@@ -274,12 +281,15 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$maxChunkNumber = intdiv($maxKeyValue, $pieceSize) + 1;
 
+			$params = new ChunkParams(
+				$handler,
+				$keyName,
+				$chunkSize,
+				$pieceSize
+			);
+
 			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				if ($dispatchSync) {
-					dispatch_now(new ChunkGenerator($job, $chunkNumber, $pieceSize));
-				} else {
-					dispatch(new ChunkGenerator($job, $chunkNumber, $pieceSize));
-				}
+				dispatch(new ChunkGenerator(app(Service::class)->serialize($query), $params, $chunkNumber));
 			}
 
 			return true;

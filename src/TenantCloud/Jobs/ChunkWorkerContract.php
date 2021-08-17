@@ -2,7 +2,9 @@
 
 namespace TenantCloud\Jobs;
 
+use Illuminate\Support\Collection;
+
 interface ChunkWorkerContract
 {
-	public function __construct(string $minKeyValue, string $maxKeyValue);
+	public function handle(Collection $items);
 }

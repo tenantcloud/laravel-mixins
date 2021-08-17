@@ -2,11 +2,13 @@
 
 namespace TenantCloud\Jobs;
 
+use AnourValar\EloquentSerialize\Service;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class ChunkGenerator implements ShouldQueue
 {
@@ -17,27 +19,31 @@ class ChunkGenerator implements ShouldQueue
 
 	public const CHUNK_PIECE = 1000;
 
-	protected string $jobClass;
+	protected string $serializedBuilder;
+
+	protected ChunkParams $params;
 
 	protected int $chunkNumber;
 
-	protected int $pieceSize = self::CHUNK_PIECE;
-
-	public function __construct(string $jobClass, int $chunkNumber, int $pieceSize = self::CHUNK_PIECE)
+	public function __construct(string $serializedBuilder, ChunkParams $params, int $chunkNumber)
 	{
-		$this->jobClass = $jobClass;
+		$this->serializedBuilder = $serializedBuilder;
+		$this->params = $params;
 		$this->chunkNumber = $chunkNumber;
-		$this->pieceSize = $pieceSize;
 	}
 
 	public function handle(): void
 	{
-		$minKeyValue = ($this->chunkNumber - 1) * $this->pieceSize;
-		$maxKeyValue = $this->chunkNumber * $this->pieceSize - 1;
+		$minKeyValue = ($this->chunkNumber - 1) * $this->params->pieceSize;
+		$maxKeyValue = $this->chunkNumber * $this->params->pieceSize - 1;
 
-		/* @var ChunkWorkerContract $job */
-		$job = new $this->jobClass($minKeyValue, $maxKeyValue);
+		$builder = app(Service::class)->unserialize($this->serializedBuilder);
 
-		dispatch($job);
+		$builder
+			->whereBetween($this->params->key, [$minKeyValue, $maxKeyValue])
+			->chunkById($this->params->chunkSize, function ($items) {
+				/* @var Collection $items */
+				dispatch(new ChunkWorker($this->serializedBuilder, $this->params, $items->pluck($this->params->key)->toArray()));
+			});
 	}
 }
