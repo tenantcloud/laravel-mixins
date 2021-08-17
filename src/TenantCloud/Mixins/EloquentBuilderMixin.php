@@ -2,7 +2,6 @@
 
 namespace TenantCloud\Mixins;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
