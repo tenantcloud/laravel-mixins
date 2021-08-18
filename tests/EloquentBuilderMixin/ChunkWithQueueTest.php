@@ -9,6 +9,7 @@ use TenantCloud\Mixins\EloquentBuilderMixin;
 use TenantCloud\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
+use Webmozart\Assert\InvalidArgumentException;
 
 /**
  * @see EloquentBuilderMixin::chunkWithQueue()
@@ -44,6 +45,27 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
 
 		Queue::assertPushed(ChunkGenerator::class, 2);
+	}
+
+	public function testJobNotFiredIfNoItemsExisting(): void
+	{
+		Queue::fake();
+
+		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
+
+		Queue::assertNotPushed(ChunkGenerator::class);
+	}
+
+	public function testNotExistedHandlerFailure(): void
+	{
+		$this->expectException(InvalidArgumentException::class);
+		TestStub::query()->chunkWithQueue('App\Test');
+	}
+
+	public function testInvalidHandlerFailure(): void
+	{
+		$this->expectException(InvalidArgumentException::class);
+		TestStub::query()->chunkWithQueue(TestStub::class);
 	}
 
 	private function generateTestModel(): TestStub
