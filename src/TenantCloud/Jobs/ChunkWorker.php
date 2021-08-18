@@ -7,7 +7,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 
 class ChunkWorker implements ShouldQueue
 {
@@ -18,20 +17,26 @@ class ChunkWorker implements ShouldQueue
 
 	public const CHUNK_SIZE = 15;
 
-	protected Collection $items;
+	protected array $itemIds;
 
 	protected string $handler;
 
-	protected array $keyValues;
+	protected string $key;
 
-	public function __construct(Collection $items, string $handler)
+	protected SerializableBuilder $serializedBuilder;
+
+	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, string $handler)
 	{
-		$this->items = $items;
+		$this->serializedBuilder = $serializedBuilder;
+		$this->key = $key;
+		$this->itemIds = $itemIds;
 		$this->handler = $handler;
 	}
 
 	public function handle(): void
 	{
-		(new $this->handler())->handle($this->items);
+		$builder = $this->serializedBuilder->getBuilder();
+		$items = $builder->where($this->key, $this->itemIds);
+		(new $this->handler())->handle($items);
 	}
 }

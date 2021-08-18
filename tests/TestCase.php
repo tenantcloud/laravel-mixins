@@ -2,11 +2,14 @@
 
 namespace Tests;
 
+use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use TenantCloud\MixinsServiceProvider;
 
 class TestCase extends BaseTestCase
 {
+	use WithFaker;
+
 	protected function setUp(): void
 	{
 		parent::setUp();

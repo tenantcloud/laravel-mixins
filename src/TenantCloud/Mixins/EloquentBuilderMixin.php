@@ -12,6 +12,7 @@ use TenantCloud\Jobs\ChunkGenerator;
 use TenantCloud\Jobs\ChunkParams;
 use TenantCloud\Jobs\ChunkWorker;
 use TenantCloud\Jobs\ChunkWorkerContract;
+use TenantCloud\Jobs\SerializableBuilder;
 use Webmozart\Assert\Assert;
 
 /**
@@ -275,7 +276,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				return true;
 			}
 
-			$maxChunkNumber = intdiv($maxKeyValue, $pieceSize) + 1;
+			$maxChunkNumber = (int) ceil($maxKeyValue / $pieceSize);
 
 			$params = new ChunkParams(
 				$handler,
@@ -284,8 +285,8 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				$pieceSize
 			);
 
-			for ($chunkNumber = 0; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new ChunkGenerator(Eloquent::serialize($query), $params, $chunkNumber));
+			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
+				dispatch(new ChunkGenerator(new SerializableBuilder($query), $params, $chunkNumber));
 			}
 
 			return true;

@@ -49,5 +49,7 @@ class MixinsServiceProvider extends ServiceProvider
 		EloquentBuilder::macro('conditionalUpdate', (new EloquentBuilderMixin())->conditionalUpdate());
 		EloquentBuilder::macro('toRawSql', (new EloquentBuilderMixin())->toRawSql());
 		EloquentBuilder::macro('chunkWithQueue', (new EloquentBuilderMixin())->chunkWithQueue());
+
+		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 	}
 }
