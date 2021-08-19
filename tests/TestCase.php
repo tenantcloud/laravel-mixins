@@ -10,10 +10,21 @@ class TestCase extends BaseTestCase
 {
 	use WithFaker;
 
-	protected function setUp(): void
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function getPackageProviders($app): array
 	{
-		parent::setUp();
+		return [
+			MixinsServiceProvider::class,
+		];
+	}
 
-		$this->app->register(MixinsServiceProvider::class);
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function defineDatabaseMigrations(): void
+	{
+		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 	}
 }

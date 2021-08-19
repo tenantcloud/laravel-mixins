@@ -39,17 +39,7 @@ class MixinsServiceProvider extends ServiceProvider
 		QueryBuilder::mixin(new QueryBuilderMixin());
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
-
-		// Because Eloquent Builder doesn't work with mixins.
-		EloquentBuilder::macro('withHas', (new EloquentBuilderMixin())->withHas());
-		EloquentBuilder::macro('withAggregate', (new EloquentBuilderMixin())->withAggregate());
-		EloquentBuilder::macro('withSum', (new EloquentBuilderMixin())->withSum());
-		EloquentBuilder::macro('selectCaseIn', (new EloquentBuilderMixin())->selectCaseIn());
-		EloquentBuilder::macro('customWhereNested', (new EloquentBuilderMixin())->customWhereNested());
-		EloquentBuilder::macro('conditionalUpdate', (new EloquentBuilderMixin())->conditionalUpdate());
-		EloquentBuilder::macro('toRawSql', (new EloquentBuilderMixin())->toRawSql());
+		EloquentBuilder::mixin(new EloquentBuilderMixin());
 		EloquentBuilder::macro('chunkWithQueue', (new EloquentBuilderMixin())->chunkWithQueue());
-
-		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
 	}
 }
