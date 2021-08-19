@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Mockery\MockInterface;
-use TenantCloud\Mixins\Jobs\ChunkWorker;
+use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
-use TenantCloud\Mixins\Models\TestStub;
+use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
 /**
- * @see ChunkWorker
+ * @see HandleChunkJob
  */
-class ChunkWorkerTest extends TestCase
+class HandleChunkJobTest extends TestCase
 {
 	use RefreshDatabase;
 
@@ -30,7 +30,7 @@ class ChunkWorkerTest extends TestCase
 				->once();
 		});
 
-		(new ChunkWorker($serializedBuilder, 'id', [], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerStub::class))->handle();
 	}
 
 	public function testFireHandleWithItems(): void
@@ -47,7 +47,7 @@ class ChunkWorkerTest extends TestCase
 				->once();
 		});
 
-		(new ChunkWorker($serializedBuilder, 'id', [$model->id], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], HandlerStub::class))->handle();
 	}
 
 	public function testAssertNotExistingHandler(): void
@@ -55,7 +55,7 @@ class ChunkWorkerTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new ChunkWorker($serializedBuilder, 'id', [], 'App\Test'))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], 'App\Test'))->handle();
 	}
 
 	public function testAssertInvalidHandler(): void
@@ -63,6 +63,6 @@ class ChunkWorkerTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new ChunkWorker($serializedBuilder, 'id', [], TestStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], TestStub::class))->handle();
 	}
 }

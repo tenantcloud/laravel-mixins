@@ -13,7 +13,7 @@ use Tests\EloquentBuilderMixin\Jobs\ChunkGeneratorTest;
 /**
  * @see ChunkGeneratorTest
  */
-class ChunkGenerator implements ShouldQueue
+class GenerateChunksJob implements ShouldQueue
 {
 	use Dispatchable;
 	use InteractsWithQueue;
@@ -47,7 +47,7 @@ class ChunkGenerator implements ShouldQueue
 			->chunkById($this->params->chunkSize, function ($items) {
 				/* @var Collection $items */
 				dispatch(
-					new ChunkWorker(
+					new HandleChunkJob(
 						$this->serializedBuilder,
 						$this->params->key,
 						$items->pluck($this->params->key)->toArray(),

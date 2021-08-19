@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 /**
  * @see ChunkWorkerTest
  */
-class ChunkWorker implements ShouldQueue
+class HandleChunkJob implements ShouldQueue
 {
 	use Dispatchable;
 	use InteractsWithQueue;
@@ -33,7 +33,7 @@ class ChunkWorker implements ShouldQueue
 	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, string $handler)
 	{
 		Assert::classExists($handler);
-		Assert::isAOf($handler, ChunkWorkerContract::class);
+		Assert::isAOf($handler, QueuedChunkHandler::class);
 
 		$this->serializedBuilder = $serializedBuilder;
 		$this->key = $key;
@@ -46,7 +46,7 @@ class ChunkWorker implements ShouldQueue
 		$builder = $this->serializedBuilder->getBuilder();
 		$items = $builder->where($this->key, $this->itemIds)->get();
 
-		/* @var ChunkWorkerContract $handler */
+		/* @var QueuedChunkHandler $handler */
 		$handler = app($this->handler);
 
 		$handler->handle($items);

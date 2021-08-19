@@ -8,10 +8,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Laravie\SerializesQuery\Eloquent;
-use TenantCloud\Mixins\Jobs\ChunkGenerator;
 use TenantCloud\Mixins\Jobs\ChunkParams;
-use TenantCloud\Mixins\Jobs\ChunkWorker;
-use TenantCloud\Mixins\Jobs\ChunkWorkerContract;
+use TenantCloud\Mixins\Jobs\GenerateChunksJob;
+use TenantCloud\Mixins\Jobs\HandleChunkJob;
+use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use Webmozart\Assert\Assert;
 
@@ -255,7 +255,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	}
 
 	/**
-	 * Same as chunkById for large tables. Split table into small piece and fire @see ChunkWorkerContract job for each of them.
+	 * Same as chunkById for large tables. Split table into small piece and fire @see QueuedChunkHandler job for each of them.
 	 *
 	 * Example usage:
 	 *
@@ -263,14 +263,18 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
-		return function (string $handler, int $chunkSize = ChunkWorker::CHUNK_SIZE, int $pieceSize = ChunkGenerator::CHUNK_PIECE, string $keyName = 'id') {
+		return function (string $handler, int $chunkSize = HandleChunkJob::CHUNK_SIZE, int $pieceSize = GenerateChunksJob::CHUNK_PIECE, string $keyName = 'id') {
 			/* @var Builder $query */
 			$query = clone $this;
 
 			Assert::classExists($handler);
-			Assert::isAOf($handler, ChunkWorkerContract::class);
+			Assert::isAOf($handler, QueuedChunkHandler::class);
 
-			$maxKeyValue = optional($query->select([$keyName])->orderBy($keyName, 'desc')->first())->{$keyName};
+			$maxKeyValue = optional(
+				$query->select([$keyName])
+					->orderBy($keyName, 'desc')
+					->first()
+			)->{$keyName};
 
 			if (!$maxKeyValue) {
 				return true;
@@ -286,7 +290,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			);
 
 			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new ChunkGenerator(new SerializableBuilder($query), $params, $chunkNumber));
+				dispatch(new GenerateChunksJob(new SerializableBuilder($query), $params, $chunkNumber));
 			}
 
 			return true;

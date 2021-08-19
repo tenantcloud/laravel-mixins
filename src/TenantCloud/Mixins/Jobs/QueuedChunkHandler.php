@@ -4,7 +4,7 @@ namespace TenantCloud\Mixins\Jobs;
 
 use Illuminate\Support\Collection;
 
-interface ChunkWorkerContract
+interface QueuedChunkHandler
 {
 	public function handle(Collection $items);
 }

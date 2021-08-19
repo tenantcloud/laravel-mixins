@@ -4,9 +4,9 @@ namespace Tests\EloquentBuilderMixin;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use TenantCloud\Mixins\Jobs\ChunkGenerator;
+use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
-use TenantCloud\Mixins\Models\TestStub;
+use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
@@ -25,7 +25,7 @@ class ChunkWithQueueTest extends TestCase
 
 		TestStub::query()->chunkWithQueue(HandlerStub::class);
 
-		Queue::assertPushed(ChunkGenerator::class, 1);
+		Queue::assertPushed(GenerateChunksJob::class, 1);
 	}
 
 	public function testMultipleJobsSuccess(): void
@@ -37,7 +37,7 @@ class ChunkWithQueueTest extends TestCase
 
 		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
 
-		Queue::assertPushed(ChunkGenerator::class, 2);
+		Queue::assertPushed(GenerateChunksJob::class, 2);
 	}
 
 	public function testJobNotFiredIfNoItemsExisting(): void
@@ -46,7 +46,7 @@ class ChunkWithQueueTest extends TestCase
 
 		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
 
-		Queue::assertNotPushed(ChunkGenerator::class);
+		Queue::assertNotPushed(GenerateChunksJob::class);
 	}
 
 	public function testNotExistedHandlerFailure(): void

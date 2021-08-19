@@ -4,18 +4,18 @@ namespace Tests\EloquentBuilderMixin\Jobs;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
-use TenantCloud\Mixins\Jobs\ChunkGenerator;
 use TenantCloud\Mixins\Jobs\ChunkParams;
-use TenantCloud\Mixins\Jobs\ChunkWorker;
+use TenantCloud\Mixins\Jobs\GenerateChunksJob;
+use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
-use TenantCloud\Mixins\Models\TestStub;
+use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
 
 /**
- * @see ChunkGenerator
+ * @see GenerateChunksJob
  */
-class ChunkGeneratorTest extends TestCase
+class GenerateChunksJobTest extends TestCase
 {
 	use RefreshDatabase;
 
@@ -31,9 +31,9 @@ class ChunkGeneratorTest extends TestCase
 			1
 		);
 
-		(new ChunkGenerator($serializedBuilder, $params, 1))->handle();
+		(new GenerateChunksJob($serializedBuilder, $params, 1))->handle();
 
-		Queue::assertNotPushed(ChunkWorker::class);
+		Queue::assertNotPushed(HandleChunkJob::class);
 	}
 
 	public function testCalculateMinMaxPrimaryKeyValue(): void
@@ -51,8 +51,8 @@ class ChunkGeneratorTest extends TestCase
 			1
 		);
 
-		(new ChunkGenerator($serializedBuilder, $params, 1))->handle();
+		(new GenerateChunksJob($serializedBuilder, $params, 1))->handle();
 
-		Queue::assertPushed(ChunkWorker::class, 1);
+		Queue::assertPushed(HandleChunkJob::class, 1);
 	}
 }
