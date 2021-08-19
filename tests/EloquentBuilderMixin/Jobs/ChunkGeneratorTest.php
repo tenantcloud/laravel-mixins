@@ -2,7 +2,7 @@
 
 namespace Tests\EloquentBuilderMixin\Jobs;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use TenantCloud\Mixins\Jobs\ChunkGenerator;
 use TenantCloud\Mixins\Jobs\ChunkParams;
@@ -17,14 +17,7 @@ use Tests\TestCase;
  */
 class ChunkGeneratorTest extends TestCase
 {
-	use DatabaseMigrations;
-
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->runDatabaseMigrations();
-	}
+	use RefreshDatabase;
 
 	public function testChunkWorkerDoesNotFireIfNoItemsExists(): void
 	{

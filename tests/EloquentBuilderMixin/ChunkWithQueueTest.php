@@ -2,7 +2,7 @@
 
 namespace Tests\EloquentBuilderMixin;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use TenantCloud\Mixins\Jobs\ChunkGenerator;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
@@ -16,14 +16,7 @@ use Webmozart\Assert\InvalidArgumentException;
  */
 class ChunkWithQueueTest extends TestCase
 {
-	use DatabaseMigrations;
-
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->runDatabaseMigrations();
-	}
+	use RefreshDatabase;
 
 	public function testSingleModelSuccess(): void
 	{

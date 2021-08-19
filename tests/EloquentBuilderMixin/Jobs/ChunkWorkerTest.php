@@ -3,7 +3,7 @@
 namespace Tests\EloquentBuilderMixin\Jobs;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Mockery\MockInterface;
 use TenantCloud\Mixins\Jobs\ChunkWorker;
@@ -18,14 +18,7 @@ use Webmozart\Assert\InvalidArgumentException;
  */
 class ChunkWorkerTest extends TestCase
 {
-	use DatabaseMigrations;
-
-	protected function setUp(): void
-	{
-		parent::setUp();
-
-		$this->runDatabaseMigrations();
-	}
+	use RefreshDatabase;
 
 	public function testFireHandleWithOutItems(): void
 	{
