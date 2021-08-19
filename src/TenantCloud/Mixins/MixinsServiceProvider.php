@@ -40,6 +40,5 @@ class MixinsServiceProvider extends ServiceProvider
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
 		EloquentBuilder::mixin(new EloquentBuilderMixin());
-		EloquentBuilder::macro('chunkWithQueue', (new EloquentBuilderMixin())->chunkWithQueue());
 	}
 }
