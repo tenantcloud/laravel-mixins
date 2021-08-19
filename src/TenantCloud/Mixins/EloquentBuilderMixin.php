@@ -268,7 +268,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			$query = clone $this;
 
 			Assert::classExists($handler);
-			Assert::isInstanceOf(new $handler(), ChunkWorkerContract::class);
+			Assert::isAOf($handler, ChunkWorkerContract::class);
 
 			$maxKeyValue = optional($query->select([$keyName])->orderBy($keyName, 'desc')->first())->{$keyName};
 

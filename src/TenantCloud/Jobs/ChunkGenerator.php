@@ -8,7 +8,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Tests\EloquentBuilderMixin\Jobs\ChunkGeneratorTest;
 
+/**
+ * @see ChunkGeneratorTest
+ */
 class ChunkGenerator implements ShouldQueue
 {
 	use Dispatchable;
