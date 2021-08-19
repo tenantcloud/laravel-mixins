@@ -8,10 +8,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use Tests\EloquentBuilderMixin\Jobs\ChunkGeneratorTest;
+use Tests\EloquentBuilderMixin\Jobs\GenerateChunksJobTest;
 
 /**
- * @see ChunkGeneratorTest
+ * @see GenerateChunksJobTest
  */
 class GenerateChunksJob implements ShouldQueue
 {
