@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Mixins;
+namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
@@ -8,11 +8,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Laravie\SerializesQuery\Eloquent;
-use TenantCloud\Jobs\ChunkGenerator;
-use TenantCloud\Jobs\ChunkParams;
-use TenantCloud\Jobs\ChunkWorker;
-use TenantCloud\Jobs\ChunkWorkerContract;
-use TenantCloud\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Jobs\ChunkGenerator;
+use TenantCloud\Mixins\Jobs\ChunkParams;
+use TenantCloud\Mixins\Jobs\ChunkWorker;
+use TenantCloud\Mixins\Jobs\ChunkWorkerContract;
+use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use Webmozart\Assert\Assert;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Jobs;
+namespace TenantCloud\Mixins\Jobs;
 
 use Illuminate\Support\Collection;
 

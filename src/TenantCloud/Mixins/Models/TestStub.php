@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Models;
+namespace TenantCloud\Mixins\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

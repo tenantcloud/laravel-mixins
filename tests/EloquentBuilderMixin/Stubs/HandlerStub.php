@@ -3,7 +3,7 @@
 namespace Tests\EloquentBuilderMixin\Stubs;
 
 use Illuminate\Support\Collection;
-use TenantCloud\Jobs\ChunkWorkerContract;
+use TenantCloud\Mixins\Jobs\ChunkWorkerContract;
 
 class HandlerStub implements ChunkWorkerContract
 {

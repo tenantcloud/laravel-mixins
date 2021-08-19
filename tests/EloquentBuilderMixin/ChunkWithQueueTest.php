@@ -4,9 +4,9 @@ namespace Tests\EloquentBuilderMixin;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Queue;
-use TenantCloud\Jobs\ChunkGenerator;
-use TenantCloud\Mixins\EloquentBuilderMixin;
-use TenantCloud\Models\TestStub;
+use TenantCloud\Mixins\Jobs\ChunkGenerator;
+use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
 use Webmozart\Assert\InvalidArgumentException;

@@ -4,11 +4,11 @@ namespace Tests\EloquentBuilderMixin\Jobs;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Queue;
-use TenantCloud\Jobs\ChunkGenerator;
-use TenantCloud\Jobs\ChunkParams;
-use TenantCloud\Jobs\ChunkWorker;
-use TenantCloud\Jobs\SerializableBuilder;
-use TenantCloud\Models\TestStub;
+use TenantCloud\Mixins\Jobs\ChunkGenerator;
+use TenantCloud\Mixins\Jobs\ChunkParams;
+use TenantCloud\Mixins\Jobs\ChunkWorker;
+use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
 

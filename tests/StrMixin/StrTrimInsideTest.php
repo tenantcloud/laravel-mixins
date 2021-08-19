@@ -3,7 +3,7 @@
 namespace Tests\StrMixin;
 
 use Illuminate\Support\Str;
-use TenantCloud\Mixins\StrMixin;
+use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
 
 /** @see StrMixin::insideTrim */

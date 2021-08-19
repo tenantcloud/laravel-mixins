@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud;
+namespace TenantCloud\Mixins;
 
 use Carbon\Carbon;
 use Illuminate\Auth\RequestGuard;
@@ -12,15 +12,15 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use TenantCloud\Mixins\ArrMixin;
-use TenantCloud\Mixins\CarbonMixin;
-use TenantCloud\Mixins\CollectionMixin;
-use TenantCloud\Mixins\EloquentBuilderMixin;
-use TenantCloud\Mixins\MySqlGrammarMixin;
-use TenantCloud\Mixins\QueryBuilderMixin;
-use TenantCloud\Mixins\RequestGuardMixin;
-use TenantCloud\Mixins\RequestMixin;
-use TenantCloud\Mixins\StrMixin;
+use TenantCloud\Mixins\Mixins\ArrMixin;
+use TenantCloud\Mixins\Mixins\CarbonMixin;
+use TenantCloud\Mixins\Mixins\CollectionMixin;
+use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Mixins\MySqlGrammarMixin;
+use TenantCloud\Mixins\Mixins\QueryBuilderMixin;
+use TenantCloud\Mixins\Mixins\RequestGuardMixin;
+use TenantCloud\Mixins\Mixins\RequestMixin;
+use TenantCloud\Mixins\Mixins\StrMixin;
 
 class MixinsServiceProvider extends ServiceProvider
 {
