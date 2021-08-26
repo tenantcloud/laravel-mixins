@@ -271,8 +271,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			Assert::isAOf($handler, QueuedChunkHandler::class);
 
 			$maxKeyValue = optional(
-				$query->select([$keyName])
-					->orderBy($keyName, 'desc')
+				$query->orderBy($keyName, 'desc')
 					->first()
 			)->{$keyName};
 
