@@ -3,7 +3,7 @@
 namespace Tests\ArrMixin;
 
 use Illuminate\Support\Arr;
-use TenantCloud\Mixins\ArrMixin;
+use TenantCloud\Mixins\Mixins\ArrMixin;
 use Tests\TestCase;
 
 /**

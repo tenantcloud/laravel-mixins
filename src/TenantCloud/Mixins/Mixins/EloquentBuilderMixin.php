@@ -1,12 +1,18 @@
 <?php
 
-namespace TenantCloud\Mixins;
+namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Laravie\SerializesQuery\Eloquent;
+use TenantCloud\Mixins\Jobs\ChunkParams;
+use TenantCloud\Mixins\Jobs\GenerateChunksJob;
+use TenantCloud\Mixins\Jobs\HandleChunkJob;
+use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
+use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use Webmozart\Assert\Assert;
 
 /**
@@ -245,6 +251,48 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			$this->getQuery()->selectCaseIn($column, $groupedIds, $alias);
 
 			return $this;
+		};
+	}
+
+	/**
+	 * Same as chunkById for large tables. Split table into small piece and fire @see QueuedChunkHandler job for each of them.
+	 *
+	 * Example usage:
+	 *
+	 * $query->chunkWithQueue(ChunkWorkerContract::class, 1000, 'id')
+	 */
+	public function chunkWithQueue(): callable
+	{
+		return function (string $handler, int $chunkSize = HandleChunkJob::CHUNK_SIZE, int $pieceSize = GenerateChunksJob::CHUNK_PIECE, string $keyName = 'id') {
+			/* @var Builder $query */
+			$query = clone $this;
+
+			Assert::classExists($handler);
+			Assert::isAOf($handler, QueuedChunkHandler::class);
+
+			$maxKeyValue = optional(
+				$query->orderBy($keyName, 'desc')
+					->first()
+			)->{$keyName};
+
+			if (!$maxKeyValue) {
+				return true;
+			}
+
+			$maxChunkNumber = (int) ceil($maxKeyValue / $pieceSize);
+
+			$params = new ChunkParams(
+				$handler,
+				$keyName,
+				$chunkSize,
+				$pieceSize
+			);
+
+			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
+				dispatch(new GenerateChunksJob(new SerializableBuilder($query), $params, $chunkNumber));
+			}
+
+			return true;
 		};
 	}
 }

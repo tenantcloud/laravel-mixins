@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Mixins;
+namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Auth\RequestGuard;
 

@@ -3,7 +3,7 @@
 namespace Tests\CollectionMixin;
 
 use Illuminate\Support\Collection;
-use TenantCloud\Mixins\CollectionMixin;
+use TenantCloud\Mixins\Mixins\CollectionMixin;
 use Tests\TestCase;
 
 /**
