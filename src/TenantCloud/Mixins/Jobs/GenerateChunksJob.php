@@ -53,7 +53,7 @@ class GenerateChunksJob implements ShouldQueue
 						$items->pluck($this->params->key)->toArray(),
 						$this->params->handler
 					)
-				);
+				)->onQueue($this->params->queue);
 			});
 	}
 }

@@ -263,7 +263,13 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
-		return function (string $handler, int $chunkSize = HandleChunkJob::CHUNK_SIZE, int $pieceSize = GenerateChunksJob::CHUNK_PIECE, string $keyName = 'id') {
+		return function (
+			string $handler,
+			int $chunkSize = HandleChunkJob::CHUNK_SIZE,
+			int $pieceSize = GenerateChunksJob::CHUNK_PIECE,
+			string $keyName = 'id',
+			string $queue = null
+		) {
 			/* @var Builder $query */
 			$query = clone $this;
 
@@ -285,7 +291,8 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				$handler,
 				$keyName,
 				$chunkSize,
-				$pieceSize
+				$pieceSize,
+				$queue
 			);
 
 			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
