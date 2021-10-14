@@ -4,6 +4,7 @@ namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Tests\ArrMixin\ArrDotWithDepthTest;
 use Tests\ArrMixin\ArrSelectTest;
 
 /**
@@ -326,6 +327,28 @@ class ArrMixin
 
 				return $carry + $result;
 			}, []);
+		};
+	}
+
+	/**
+	 * Same as Arr::dot, but it has a depth limit.
+	 *
+	 * @see ArrDotWithDepthTest
+	 */
+	public function dotWithDepth(): callable
+	{
+		return static function (array $array, $prepend = '', ?int $depth = null): array {
+			$results = [];
+
+			foreach ($array as $key => $value) {
+				if (is_array($value) && !empty($value) && ($depth === null || ($depth - 1) > 0)) {
+					$results = array_merge($results, Arr::dotWithDepth($value, $prepend . $key . '.', $depth - 1));
+				} else {
+					$results[$prepend . $key] = $value;
+				}
+			}
+
+			return $results;
 		};
 	}
 }
