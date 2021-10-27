@@ -33,7 +33,7 @@ class HandleChunkJobTest extends TestCase
 		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerStub::class))->handle();
 	}
 
-	public function testFireHandleWithItems(): void
+	public function testFireHandleWithItem(): void
 	{
 		$model = new TestStub();
 		$model->name = $this->faker->name;
@@ -48,6 +48,27 @@ class HandleChunkJobTest extends TestCase
 		});
 
 		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], HandlerStub::class))->handle();
+	}
+
+	public function testFireHandleWithMultipleItems(): void
+	{
+		$model = new TestStub();
+		$model->name = $this->faker->name;
+		$model->save();
+
+		$model2 = new TestStub();
+		$model2->name = $this->faker->name;
+		$model2->save();
+
+		$serializedBuilder = new SerializableBuilder(TestStub::query());
+
+		$this->mock(HandlerStub::class, function (MockInterface $mock) {
+			$mock->shouldReceive('handle')
+				->with(Mockery::on(fn ($items) => $items instanceof Collection && $items->count() === 2))
+				->once();
+		});
+
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id, $model2->id], HandlerStub::class))->handle();
 	}
 
 	public function testAssertNotExistingHandler(): void

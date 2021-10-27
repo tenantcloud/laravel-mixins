@@ -44,7 +44,7 @@ class HandleChunkJob implements ShouldQueue
 	public function handle(): void
 	{
 		$builder = $this->serializedBuilder->getBuilder();
-		$items = $builder->where($this->key, $this->itemIds)->get();
+		$items = $builder->whereIn($this->key, $this->itemIds)->get();
 
 		/* @var QueuedChunkHandler $handler */
 		$handler = app($this->handler);
