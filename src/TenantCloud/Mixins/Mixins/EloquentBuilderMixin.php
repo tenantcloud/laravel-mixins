@@ -271,13 +271,13 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			string $queue = null
 		) {
 			/* @var Builder $query */
-			$query = clone $this;
+			$query = $this->clone();
 
 			Assert::classExists($handler);
 			Assert::isAOf($handler, QueuedChunkHandler::class);
 
 			$maxKeyValue = optional(
-				$query->orderBy($keyName, 'desc')
+				$this->clone()->orderBy($keyName, 'desc')
 					->first()
 			)->{$keyName};
 
