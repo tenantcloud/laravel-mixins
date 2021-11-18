@@ -17,12 +17,12 @@ class SerializableBuilder
 	{
 		$this->key = uniqid('chunk_job:', false);
 		$this->builder = $builder;
-
-		Cache::put($this->key, Eloquent::serialize($builder), Carbon::now()->addWeek());
 	}
 
 	public function __serialize(): array
 	{
+		Cache::put($this->key, Eloquent::serialize($this->builder), Carbon::now()->addWeek());
+
 		return ['key' => $this->key];
 	}
 

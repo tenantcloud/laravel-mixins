@@ -296,8 +296,10 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				$queue
 			);
 
+			$builder = new SerializableBuilder($query);
+
 			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new GenerateChunksJob(new SerializableBuilder($query), $params, $chunkNumber));
+				dispatch(new GenerateChunksJob($builder, $params, $chunkNumber));
 			}
 
 			return true;
