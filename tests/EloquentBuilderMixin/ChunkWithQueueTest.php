@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -35,7 +36,11 @@ class ChunkWithQueueTest extends TestCase
 		$this->generateTestModel();
 		$this->generateTestModel();
 
-		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
+		$settings = ChunkWithQueueSettings::defaultSettings();
+		$settings->chunkOptions->chunkSize = 1;
+		$settings->chunkOptions->pieceSize = 1;
+
+		TestStub::query()->chunkWithQueue(HandlerStub::class, $settings);
 
 		Queue::assertPushed(GenerateChunksJob::class, 2);
 	}
@@ -44,7 +49,11 @@ class ChunkWithQueueTest extends TestCase
 	{
 		Queue::fake();
 
-		TestStub::query()->chunkWithQueue(HandlerStub::class, 1, 1);
+		$settings = ChunkWithQueueSettings::defaultSettings();
+		$settings->chunkOptions->chunkSize = 1;
+		$settings->chunkOptions->pieceSize = 1;
+
+		TestStub::query()->chunkWithQueue(HandlerStub::class, $settings);
 
 		Queue::assertNotPushed(GenerateChunksJob::class);
 	}
