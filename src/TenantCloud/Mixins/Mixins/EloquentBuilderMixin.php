@@ -10,9 +10,9 @@ use InvalidArgumentException;
 use Laravie\SerializesQuery\Eloquent;
 use TenantCloud\Mixins\Jobs\ChunkParams;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
-use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use Webmozart\Assert\Assert;
 
 /**
@@ -265,11 +265,12 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	{
 		return function (
 			string $handler,
-			int $chunkSize = HandleChunkJob::CHUNK_SIZE,
-			int $pieceSize = GenerateChunksJob::CHUNK_PIECE,
-			string $keyName = 'id',
-			string $queue = null
+			ChunkWithQueueSettings $settings = null
 		) {
+			if (!$settings) {
+				$settings = ChunkWithQueueSettings::defaultSettings();
+			}
+
 			/* @var Builder $query */
 			$query = clone $this;
 
@@ -278,26 +279,30 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$maxKeyValue = optional(
 				(clone $this)
-					->orderBy($keyName, 'desc')
+					->orderBy($settings->queryOptions->keyName, 'desc')
 					->first()
-			)->{$keyName};
+			)->{$settings->queryOptions->keyName};
 
 			if (!$maxKeyValue) {
 				return true;
 			}
 
-			$maxChunkNumber = (int) ceil($maxKeyValue / $pieceSize);
+			$maxChunkNumber = (int) ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
 
 			$params = new ChunkParams(
 				$handler,
-				$keyName,
-				$chunkSize,
-				$pieceSize,
-				$queue
+				$settings->queryOptions->keyName,
+				$settings->chunkOptions->chunkSize,
+				$settings->chunkOptions->pieceSize,
+				$settings->queueOptions->chunkQueue
 			);
 
+			$builder = new SerializableBuilder($query);
+
 			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
-				dispatch(new GenerateChunksJob(new SerializableBuilder($query), $params, $chunkNumber));
+				dispatch(new GenerateChunksJob($builder, $params, $chunkNumber))
+					->onQueue($settings->queueOptions->pieceQueue)
+					->delay($settings->queueOptions->delay ? $settings->queueOptions->delay * ($chunkNumber - 1) : null);
 			}
 
 			return true;
