@@ -13,8 +13,7 @@ class QueueOptions
 	/** Queue for chunk jobs. */
 	public ?string $chunkQueue = null;
 
-	/** @var DateTimeInterface|DateInterval|int|null */
-	public $delay;
+	public int $delay;
 
 	public function __construct(?string $pieceQueue, ?string $chunkQueue, $delay = null)
 	{
