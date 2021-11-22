@@ -302,7 +302,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
 				dispatch(new GenerateChunksJob($builder, $params, $chunkNumber))
 					->onQueue($settings->queueOptions->pieceQueue)
-					->delay($settings->queueOptions->delay * ($chunkNumber - 1));
+					->delay($settings->queueOptions->delay ? $settings->queueOptions->delay * ($chunkNumber - 1) : null);
 			}
 
 			return true;
