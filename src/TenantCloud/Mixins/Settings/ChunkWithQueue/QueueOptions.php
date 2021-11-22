@@ -2,9 +2,6 @@
 
 namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 
-use DateInterval;
-use DateTimeInterface;
-
 class QueueOptions
 {
 	/** Queue for generate chunk jobs. */
