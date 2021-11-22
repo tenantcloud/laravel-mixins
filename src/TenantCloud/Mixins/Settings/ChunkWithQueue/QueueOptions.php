@@ -10,7 +10,7 @@ class QueueOptions
 	/** Queue for chunk jobs. */
 	public ?string $chunkQueue = null;
 
-	public int $delay;
+	public ?int $delay;
 
 	public function __construct(?string $pieceQueue, ?string $chunkQueue, $delay = null)
 	{
