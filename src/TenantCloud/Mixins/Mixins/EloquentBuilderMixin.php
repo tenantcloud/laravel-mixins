@@ -5,9 +5,9 @@ namespace TenantCloud\Mixins\Mixins;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Laravie\SerializesQuery\Eloquent;
 use TenantCloud\Mixins\Jobs\ChunkParams;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
@@ -278,10 +278,16 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			Assert::isAOf($handler, QueuedChunkHandler::class);
 
 			$maxKeyValue = optional(
-				(clone $this)
-					->orderBy($settings->queryOptions->keyName, 'desc')
-					->first()
-			)->{$settings->queryOptions->keyName};
+				DB::query()
+					->fromSub(
+						$this->clone()
+							->getQuery()
+							->orderBy($settings->queryOptions->keyName, 'desc')
+							->limit(1),
+						$this->getModel()->getTable()
+					)
+					->first($settings->queryOptions->keyName)
+			)->{$settings->queryOptions->attributeKeyName};
 
 			if (!$maxKeyValue) {
 				return true;
@@ -292,6 +298,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			$params = new ChunkParams(
 				$handler,
 				$settings->queryOptions->keyName,
+				$settings->queryOptions->attributeKeyName,
 				$settings->chunkOptions->chunkSize,
 				$settings->chunkOptions->pieceSize,
 				$settings->queueOptions->chunkQueue

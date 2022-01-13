@@ -2,10 +2,10 @@
 
 namespace TenantCloud\Mixins\Jobs;
 
+use AnourValar\EloquentSerialize\Facades\EloquentSerializeFacade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
-use Laravie\SerializesQuery\Eloquent;
 
 class SerializableBuilder
 {
@@ -18,7 +18,7 @@ class SerializableBuilder
 		$this->key = uniqid('chunk_job:', false);
 		$this->builder = $builder;
 
-		Cache::put($this->key, Eloquent::serialize($builder), Carbon::now()->addWeek());
+		Cache::put($this->key, EloquentSerializeFacade::serialize($builder), Carbon::now()->addWeek());
 	}
 
 	public function __serialize(): array
@@ -30,7 +30,7 @@ class SerializableBuilder
 	{
 		$this->key = $data['key'];
 
-		$this->builder = Eloquent::unserialize(Cache::get($this->key));
+		$this->builder = EloquentSerializeFacade::unserialize(Cache::get($this->key));
 	}
 
 	public function getBuilder(): Builder

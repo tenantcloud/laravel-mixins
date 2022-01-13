@@ -27,6 +27,7 @@ class GenerateChunksJobTest extends TestCase
 		$params = new ChunkParams(
 			HandlerStub::class,
 			'id',
+			'id',
 			1,
 			1
 		);
@@ -46,6 +47,7 @@ class GenerateChunksJobTest extends TestCase
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 		$params = new ChunkParams(
 			HandlerStub::class,
+			'id',
 			'id',
 			1,
 			1

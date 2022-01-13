@@ -2,14 +2,36 @@
 
 namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 
+use Illuminate\Support\Str;
+
+/**
+ * @property string $keyName
+ * @property string $attributeKeyName
+ */
 class QueryOptions
 {
 	/** Unique key for chunk DB query. */
-	public string $keyName;
+	protected string $keyName;
 
-	public function __construct(string $keyName)
+	/** keyName can contain table name as part of combined key, but $attributeKeyName should have only simple key for model attribute access */
+	protected string $attributeKeyName;
+
+	public function __construct(string $keyName, string $attributeKeyName = null)
 	{
 		$this->keyName = $keyName;
+		$this->attributeKeyName = $attributeKeyName ?? Str::contains($this->keyName, '.')
+				? trim(explode('.', $this->keyName)[1], '\'"')
+				: $this->keyName;
+	}
+
+	/**
+	 * We want to protect these values from external changes. But read is allowed protected attributes.
+	 *
+	 * @param mixed $name
+	 */
+	public function __get($name)
+	{
+		return $this->{$name};
 	}
 
 	public static function defaultInstance(): self
