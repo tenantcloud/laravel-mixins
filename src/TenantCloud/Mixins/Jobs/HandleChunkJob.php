@@ -26,11 +26,13 @@ class HandleChunkJob implements ShouldQueue
 
 	protected string $handler;
 
+	protected array $handlerParameters;
+
 	protected string $key;
 
 	protected SerializableBuilder $serializedBuilder;
 
-	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, string $handler)
+	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, string $handler, array $handlerParameters = [])
 	{
 		Assert::classExists($handler);
 		Assert::isAOf($handler, QueuedChunkHandler::class);
@@ -39,6 +41,7 @@ class HandleChunkJob implements ShouldQueue
 		$this->key = $key;
 		$this->itemIds = $itemIds;
 		$this->handler = $handler;
+		$this->handlerParameters = $handlerParameters;
 	}
 
 	public function handle(): void
@@ -47,7 +50,7 @@ class HandleChunkJob implements ShouldQueue
 		$items = $builder->whereIn($this->key, $this->itemIds)->get();
 
 		/* @var QueuedChunkHandler $handler */
-		$handler = app($this->handler);
+		$handler = app($this->handler, $this->handlerParameters);
 
 		$handler->handle($items);
 	}

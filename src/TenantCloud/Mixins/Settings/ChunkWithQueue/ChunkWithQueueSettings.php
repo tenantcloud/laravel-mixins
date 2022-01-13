@@ -10,6 +10,8 @@ class ChunkWithQueueSettings
 
 	public QueueOptions $queueOptions;
 
+	public array $handlerParameters = [];
+
 	public function __construct(
 		QueryOptions $queryOptions,
 		ChunkOptions $chunkOptions,
