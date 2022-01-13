@@ -5,8 +5,8 @@ namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 use Illuminate\Support\Str;
 
 /**
- * @property string $keyName
- * @property string $attributeKeyName
+ * @property-read string $keyName
+ * @property-read string $attributeKeyName
  */
 class QueryOptions
 {
