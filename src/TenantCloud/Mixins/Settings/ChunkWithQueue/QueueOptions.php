@@ -2,6 +2,8 @@
 
 namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 
+use TenantCloud\Mixins\Jobs\GenerateChunksJob;
+
 class QueueOptions
 {
 	/** Queue for generate chunk jobs. */
@@ -10,6 +12,7 @@ class QueueOptions
 	/** Queue for chunk jobs. */
 	public ?string $chunkQueue = null;
 
+	/** The number of seconds between @see GenerateChunksJob handle */
 	public ?int $delay;
 
 	public function __construct(?string $pieceQueue, ?string $chunkQueue, $delay = null)
