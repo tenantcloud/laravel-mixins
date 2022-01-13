@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
 use Tests\EloquentBuilderMixin\Jobs\HandleChunkJobTest;
 use Webmozart\Assert\Assert;
 
@@ -24,24 +25,21 @@ class HandleChunkJob implements ShouldQueue
 
 	protected array $itemIds;
 
-	protected string $handler;
-
-	protected array $handlerParameters;
+	protected HandlerOptions $handler;
 
 	protected string $key;
 
 	protected SerializableBuilder $serializedBuilder;
 
-	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, string $handler, array $handlerParameters = [])
+	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, HandlerOptions $handler)
 	{
-		Assert::classExists($handler);
-		Assert::isAOf($handler, QueuedChunkHandler::class);
+		Assert::classExists($handler->handlerClass);
+		Assert::isAOf($handler->handlerClass, $handler->isChunk() ? QueuedChunkHandler::class : ShouldQueue::class);
 
 		$this->serializedBuilder = $serializedBuilder;
 		$this->key = $key;
 		$this->itemIds = $itemIds;
 		$this->handler = $handler;
-		$this->handlerParameters = $handlerParameters;
 	}
 
 	public function handle(): void
@@ -50,7 +48,9 @@ class HandleChunkJob implements ShouldQueue
 		$items = $builder->whereIn($this->key, $this->itemIds)->get();
 
 		/* @var QueuedChunkHandler $handler */
-		$handler = app($this->handler, $this->handlerParameters);
+		$handler = $this->handler->isChunk()
+			? app($this->handler->handlerClass, $this->handler->handlerParams)
+			: new SimpleQueuedChunkHandlerJob($this->handler);
 
 		$handler->handle($items);
 	}

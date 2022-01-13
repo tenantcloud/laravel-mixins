@@ -8,6 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -30,7 +31,7 @@ class HandleChunkJobTest extends TestCase
 				->once();
 		});
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerOptions::chunkHandler(HandlerStub::class)))->handle();
 	}
 
 	public function testFireHandleWithItem(): void
@@ -47,7 +48,7 @@ class HandleChunkJobTest extends TestCase
 				->once();
 		});
 
-		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], HandlerOptions::chunkHandler(HandlerStub::class)))->handle();
 	}
 
 	public function testFireHandleWithMultipleItems(): void
@@ -68,7 +69,7 @@ class HandleChunkJobTest extends TestCase
 				->once();
 		});
 
-		(new HandleChunkJob($serializedBuilder, 'id', [$model->id, $model2->id], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id, $model2->id], HandlerOptions::chunkHandler(HandlerStub::class)))->handle();
 	}
 
 	public function testAssertNotExistingHandler(): void
@@ -76,7 +77,7 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], 'App\Test'))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerOptions::chunkHandler('App\Test')))->handle();
 	}
 
 	public function testAssertInvalidHandler(): void
@@ -84,6 +85,6 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], TestStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerOptions::chunkHandler(TestStub::class)))->handle();
 	}
 }

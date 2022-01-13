@@ -13,6 +13,7 @@ use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
+use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
 use Webmozart\Assert\Assert;
 
 /**
@@ -263,20 +264,20 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function chunkWithQueue(): callable
 	{
+		/* @param string|HandlerOptions $handler */
 		return function (
-			string $handler,
+			$handler,
 			ChunkWithQueueSettings $settings = null
 		) {
 			if (!$settings) {
 				$settings = ChunkWithQueueSettings::defaultSettings();
 			}
 
+			$handler = is_string($handler) ? HandlerOptions::chunkHandler($handler) : $handler;
+			$handler->queue = $settings->queueOptions->chunkQueue;
+
 			/* @var Builder $query */
 			$query = clone $this;
-
-			Assert::classExists($handler);
-			Assert::isAOf($handler, QueuedChunkHandler::class);
-			Assert::notNull(app($handler, $settings->handlerParameters));
 
 			$maxKeyValue = optional(
 				DB::query()
@@ -298,7 +299,6 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$params = new ChunkParams(
 				$handler,
-				$settings->handlerParameters,
 				$settings->queryOptions->keyName,
 				$settings->queryOptions->attributeKeyName,
 				$settings->chunkOptions->chunkSize,
