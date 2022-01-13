@@ -259,7 +259,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 *
 	 * Example usage:
 	 *
-	 * $query->chunkWithQueue(ChunkWorkerContract::class, 1000, 'id')
+	 * $query->chunkWithQueue(ChunkWorkerContract::class, $settings)
 	 */
 	public function chunkWithQueue(): callable
 	{
@@ -276,6 +276,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			Assert::classExists($handler);
 			Assert::isAOf($handler, QueuedChunkHandler::class);
+			Assert::notNull(app($handler, $settings->handlerParameters));
 
 			$maxKeyValue = optional(
 				DB::query()
@@ -297,6 +298,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$params = new ChunkParams(
 				$handler,
+				$settings->handlerParameters,
 				$settings->queryOptions->keyName,
 				$settings->queryOptions->attributeKeyName,
 				$settings->chunkOptions->chunkSize,

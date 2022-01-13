@@ -6,6 +6,8 @@ class ChunkParams
 {
 	public string $handler;
 
+	public array $handlerParameters;
+
 	public string $key;
 
 	public string $keyAttributeName;
@@ -20,6 +22,7 @@ class ChunkParams
 
 	public function __construct(
 		string $handler,
+		array $handlerParameters,
 		string $key,
 		string $keyAttributeName,
 		int $chunkSize,
@@ -27,6 +30,7 @@ class ChunkParams
 		?string $queue = null
 	) {
 		$this->handler = $handler;
+		$this->handlerParameters = $handlerParameters;
 		$this->key = $key;
 		$this->keyAttributeName = $keyAttributeName;
 		$this->chunkSize = $chunkSize;

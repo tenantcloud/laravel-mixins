@@ -2,6 +2,7 @@
 
 namespace Tests\EloquentBuilderMixin;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
@@ -10,6 +11,7 @@ use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\QueryOptions;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
+use Tests\EloquentBuilderMixin\Stubs\HandlerWithConstructorStub;
 use Tests\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -28,6 +30,29 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(HandlerStub::class);
 
 		Queue::assertPushed(GenerateChunksJob::class, 1);
+	}
+
+	public function testHandlerParametersPassed(): void
+	{
+		$this->generateTestModel();
+
+		$settings = ChunkWithQueueSettings::defaultSettings();
+		$settings->handlerParameters = ['date' => $date = $this->faker->date];
+
+		$this->expectExceptionMessage('Argument date is :' . $date);
+
+		TestStub::query()->chunkWithQueue(HandlerWithConstructorStub::class, $settings);
+	}
+
+	public function testIncorrectHandlerParameters(): void
+	{
+		$this->generateTestModel();
+
+		$settings = ChunkWithQueueSettings::defaultSettings();
+
+		$this->expectException(BindingResolutionException::class);
+
+		TestStub::query()->chunkWithQueue(HandlerWithConstructorStub::class, $settings);
 	}
 
 	public function testMultipleJobsSuccess(): void
