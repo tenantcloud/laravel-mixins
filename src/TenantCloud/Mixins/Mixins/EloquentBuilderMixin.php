@@ -281,7 +281,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				DB::query()
 					->fromSub(
 						$this->clone()
-							->getQuery()
+							->toBase()
 							->orderBy($settings->queryOptions->keyName, 'desc')
 							->limit(1),
 						$this->getModel()->getTable()
