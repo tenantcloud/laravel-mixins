@@ -10,10 +10,13 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use TenantCloud\Mixins\Jobs\ChunkParams;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
-use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\Handler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ItemHandler;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
-use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
+use Tests\EloquentBuilderMixin\ChunkWithQueueTest;
 use Webmozart\Assert\Assert;
 
 /**
@@ -261,10 +264,12 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 * Example usage:
 	 *
 	 * $query->chunkWithQueue(ChunkWorkerContract::class, $settings)
+	 *
+	 * @see ChunkWithQueueTest
 	 */
 	public function chunkWithQueue(): callable
 	{
-		/* @param string|HandlerOptions $handler */
+		/* @param string|callable|ChunkHandler|ItemHandler $handler */
 		return function (
 			$handler,
 			ChunkWithQueueSettings $settings = null
@@ -273,8 +278,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				$settings = ChunkWithQueueSettings::defaultSettings();
 			}
 
-			$handler = is_string($handler) ? HandlerOptions::chunkHandler($handler) : $handler;
-			$handler->queue = $settings->queueOptions->chunkQueue;
+			$handler = is_object($handler) && is_a($handler, Handler::class) ? $handler : new ChunkHandler($handler);
 
 			/* @var Builder $query */
 			$query = clone $this;

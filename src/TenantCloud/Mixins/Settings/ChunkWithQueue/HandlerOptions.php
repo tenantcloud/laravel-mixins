@@ -3,7 +3,7 @@
 namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use Webmozart\Assert\Assert;
 
 class HandlerOptions

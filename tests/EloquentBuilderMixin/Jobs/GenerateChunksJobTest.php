@@ -8,7 +8,7 @@ use TenantCloud\Mixins\Jobs\ChunkParams;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
-use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -26,7 +26,7 @@ class GenerateChunksJobTest extends TestCase
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 		$params = new ChunkParams(
-			HandlerOptions::chunkHandler(HandlerStub::class),
+			new ChunkHandler(HandlerStub::class),
 			'id',
 			'id',
 			1,
@@ -47,7 +47,7 @@ class GenerateChunksJobTest extends TestCase
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 		$params = new ChunkParams(
-			HandlerOptions::chunkHandler(HandlerStub::class),
+			new ChunkHandler(HandlerStub::class),
 			'id',
 			'id',
 			1,

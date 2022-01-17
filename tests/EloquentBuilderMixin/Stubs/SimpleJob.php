@@ -6,8 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
+use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
 
-class SimpleJob implements ShouldQueue
+class SimpleJob implements ShouldQueue, QueuedItemHandler
 {
 	use Queueable;
 
@@ -17,11 +18,17 @@ class SimpleJob implements ShouldQueue
 
 	public Carbon $updatedTime;
 
-	public function __construct(Model $item, string $name, Carbon $updatedTime)
+	public function __construct(string $name, Carbon $updatedTime)
 	{
-		$this->item = $item;
 		$this->name = $name;
 		$this->updatedTime = $updatedTime;
+	}
+
+	public function setItem(Model $item): QueuedItemHandler
+	{
+		$this->item = $item;
+
+		return $this;
 	}
 
 	public function handle(): void

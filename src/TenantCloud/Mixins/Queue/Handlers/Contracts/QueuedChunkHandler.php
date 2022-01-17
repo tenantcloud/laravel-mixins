@@ -1,6 +1,6 @@
 <?php
 
-namespace TenantCloud\Mixins\Jobs;
+namespace TenantCloud\Mixins\Queue\Handlers\Contracts;
 
 use Illuminate\Support\Collection;
 

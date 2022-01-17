@@ -2,11 +2,11 @@
 
 namespace TenantCloud\Mixins\Jobs;
 
-use TenantCloud\Mixins\Settings\ChunkWithQueue\HandlerOptions;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\Handler;
 
 class ChunkParams
 {
-	public HandlerOptions $handler;
+	public Handler $handler;
 
 	public string $key;
 
@@ -19,7 +19,7 @@ class ChunkParams
 	public ?string $queue;
 
 	public function __construct(
-		HandlerOptions $handler,
+		Handler $handler,
 		string $key,
 		string $keyAttributeName,
 		int $chunkSize,
