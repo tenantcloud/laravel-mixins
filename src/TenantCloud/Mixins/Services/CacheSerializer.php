@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CacheSerializer
 {
-	public static function serialize(object $object, callable $serializeCallback = null): array
+	public static function serialize($object, callable $serializeCallback = null): array
 	{
 		$serializeCallback ??= fn ($object) => serialize($object);
 		Cache::put($key = uniqid('mixins:serialized:', false), $serializeCallback($object), Carbon::now()->addWeek());

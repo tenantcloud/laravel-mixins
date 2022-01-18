@@ -8,9 +8,12 @@ use Webmozart\Assert\Assert;
 
 class ChunkHandler extends Handler
 {
-	/** @var QueuedChunkHandler|SerializableClosure */
+	/** @var QueuedChunkHandler|SerializableClosure|string */
 	protected $handler;
 
+	/**
+	 * @param QueuedChunkHandler|callable|string $handler
+	 */
 	public function __construct($handler)
 	{
 		parent::__construct($handler);

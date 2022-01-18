@@ -22,7 +22,7 @@ abstract class Handler
 		} elseif (is_string($handler)) {
 			Assert::classExists($handler);
 
-			$this->handler = app($handler);
+			$this->handler = $handler;
 		} else {
 			$this->handler = $handler;
 		}
@@ -43,6 +43,6 @@ abstract class Handler
 	 */
 	public function getHandler()
 	{
-		return $this->handler;
+		return is_string($this->handler) ? app($this->handler) : $this->handler;
 	}
 }
