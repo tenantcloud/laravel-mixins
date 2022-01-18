@@ -2,15 +2,16 @@
 
 namespace Tests\EloquentBuilderMixin\Stubs;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
-use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 
 class HandlerWithConstructorStub implements QueuedChunkHandler
 {
-	public string $date;
+	public Carbon $date;
 
-	public function __construct(string $date)
+	public function __construct(Carbon $date)
 	{
 		$this->date = $date;
 	}
@@ -18,6 +19,6 @@ class HandlerWithConstructorStub implements QueuedChunkHandler
 	public function handle(Collection $items): void
 	{
 		// For catch in phpunit test
-		throw new Exception('Argument date is :' . $this->date);
+		throw new Exception('Argument date is :' . $this->date->toDateTimeString());
 	}
 }

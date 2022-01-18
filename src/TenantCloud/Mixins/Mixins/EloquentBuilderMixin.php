@@ -10,9 +10,13 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use TenantCloud\Mixins\Jobs\ChunkParams;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
-use TenantCloud\Mixins\Jobs\QueuedChunkHandler;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\Handler;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ItemHandler;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
+use Tests\EloquentBuilderMixin\ChunkWithQueueTest;
 use Webmozart\Assert\Assert;
 
 /**
@@ -260,23 +264,24 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 * Example usage:
 	 *
 	 * $query->chunkWithQueue(ChunkWorkerContract::class, $settings)
+	 *
+	 * @see ChunkWithQueueTest
 	 */
 	public function chunkWithQueue(): callable
 	{
+		/* @param string|callable|ChunkHandler|ItemHandler $handler */
 		return function (
-			string $handler,
+			$handler,
 			ChunkWithQueueSettings $settings = null
 		) {
 			if (!$settings) {
 				$settings = ChunkWithQueueSettings::defaultSettings();
 			}
 
+			$handler = is_object($handler) && is_a($handler, Handler::class) ? $handler : new ChunkHandler($handler);
+
 			/* @var Builder $query */
 			$query = clone $this;
-
-			Assert::classExists($handler);
-			Assert::isAOf($handler, QueuedChunkHandler::class);
-			Assert::notNull(app($handler, $settings->handlerParameters));
 
 			$maxKeyValue = optional(
 				DB::query()
@@ -298,7 +303,6 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$params = new ChunkParams(
 				$handler,
-				$settings->handlerParameters,
 				$settings->queryOptions->keyName,
 				$settings->queryOptions->attributeKeyName,
 				$settings->chunkOptions->chunkSize,

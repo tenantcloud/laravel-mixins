@@ -2,16 +2,19 @@
 
 namespace Tests\EloquentBuilderMixin;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ItemHandler;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\QueryOptions;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerWithConstructorStub;
+use Tests\EloquentBuilderMixin\Stubs\SimpleJob;
+use Tests\EloquentBuilderMixin\Stubs\SimpleJobWithoutParams;
 use Tests\TestCase;
 use Webmozart\Assert\InvalidArgumentException;
 
@@ -36,23 +39,11 @@ class ChunkWithQueueTest extends TestCase
 	{
 		$this->generateTestModel();
 
-		$settings = ChunkWithQueueSettings::defaultSettings();
-		$settings->handlerParameters = ['date' => $date = $this->faker->date];
+		$date = new Carbon($this->faker->dateTime);
 
-		$this->expectExceptionMessage('Argument date is :' . $date);
+		$this->expectExceptionMessage('Argument date is :' . $date->toDateTimeString());
 
-		TestStub::query()->chunkWithQueue(HandlerWithConstructorStub::class, $settings);
-	}
-
-	public function testIncorrectHandlerParameters(): void
-	{
-		$this->generateTestModel();
-
-		$settings = ChunkWithQueueSettings::defaultSettings();
-
-		$this->expectException(BindingResolutionException::class);
-
-		TestStub::query()->chunkWithQueue(HandlerWithConstructorStub::class, $settings);
+		TestStub::query()->chunkWithQueue(new HandlerWithConstructorStub($date), ChunkWithQueueSettings::defaultSettings());
 	}
 
 	public function testMultipleJobsSuccess(): void
@@ -69,6 +60,31 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(HandlerStub::class, $settings);
 
 		Queue::assertPushed(GenerateChunksJob::class, 2);
+	}
+
+	public function testWithCallableHandlerSuccess(): void
+	{
+		$model = $this->generateTestModel();
+
+		$name = $this->faker->name;
+		$time = new Carbon($this->faker->dateTime);
+
+		TestStub::query()->chunkWithQueue(new ItemHandler(new SimpleJob($name, $time)));
+
+		$this->assertSame($name, $model->refresh()->name);
+		$this->assertSame($time->toDateTimeString(), $model->updated_at->toDateTimeString());
+	}
+
+	public function testWithSimpleChunkHandlerWithoutParamsSuccess(): void
+	{
+		$model1 = $this->generateTestModel();
+		$model2 = $this->generateTestModel();
+
+		TestStub::query()->chunkWithQueue(new ItemHandler(static fn ($item) => new SimpleJobWithoutParams($item)));
+
+		foreach ([$model1, $model2] as $model) {
+			$this->assertSame('Job working', $model->refresh()->name);
+		}
 	}
 
 	public function testMultipleJobsWithTableNameInQuerySettingsSuccess(): void
@@ -99,6 +115,12 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(HandlerStub::class, $settings);
 
 		Queue::assertNotPushed(GenerateChunksJob::class);
+	}
+
+	public function testNotIncorrectHandlerType(): void
+	{
+		$this->expectException(InvalidArgumentException::class);
+		TestStub::query()->chunkWithQueue(new ItemHandler(new SimpleJobWithoutParams(new TestStub())));
 	}
 
 	public function testNotExistedHandlerFailure(): void
