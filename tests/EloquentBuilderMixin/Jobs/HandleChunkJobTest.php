@@ -4,6 +4,8 @@ namespace Tests\EloquentBuilderMixin\Jobs;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
+use Mockery\MockInterface;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
@@ -29,6 +31,19 @@ class HandleChunkJobTest extends TestCase
 		};
 
 		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(new HandlerStub($checkCallback))))->handle();
+	}
+
+	public function testItShouldPassMockedClasses(): void
+	{
+		$serializedBuilder = new SerializableBuilder(TestStub::query());
+
+		$this->mock(HandlerStub::class, function (MockInterface $mock) {
+			$mock->shouldReceive('handle')
+				->with(Mockery::on(fn ($items) => $items instanceof Collection && $items->count() === 0))
+				->once();
+		});
+
+		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(HandlerStub::class)))->handle();
 	}
 
 	public function testFireHandleWithItem(): void

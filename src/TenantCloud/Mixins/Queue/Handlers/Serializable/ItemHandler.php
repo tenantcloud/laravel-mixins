@@ -8,9 +8,12 @@ use Webmozart\Assert\Assert;
 
 class ItemHandler extends Handler
 {
-	/** @var QueuedItemHandler|SerializableClosure */
+	/** @var QueuedItemHandler|SerializableClosure|string */
 	protected $handler;
 
+	/**
+	 * @param QueuedItemHandler|callable|string $handler
+	 */
 	public function __construct($handler)
 	{
 		parent::__construct($handler);
