@@ -3,7 +3,6 @@
 namespace TenantCloud\Mixins\Queue\Handlers\Serializable;
 
 use Illuminate\Queue\SerializableClosure;
-use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
 use Webmozart\Assert\Assert;
 
