@@ -22,7 +22,7 @@ abstract class Handler
 		} elseif (is_string($handler)) {
 			Assert::classExists($handler);
 
-			$this->handler = new $handler();
+			$this->handler = app($handler);
 		} else {
 			$this->handler = $handler;
 		}
