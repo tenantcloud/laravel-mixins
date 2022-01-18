@@ -2,18 +2,15 @@
 
 namespace TenantCloud\Mixins\Queue\Handlers\Serializable;
 
-use Carbon\Carbon;
 use Illuminate\Queue\SerializableClosure;
-use Illuminate\Support\Facades\Cache;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
+use TenantCloud\Mixins\Services\CacheSerializer;
 use Webmozart\Assert\Assert;
 
 abstract class Handler
 {
 	protected $handler;
-
-	protected string $key;
 
 	/**
 	 * @param QueuedItemHandler|QueuedChunkHandler|callable|string $handler
@@ -29,21 +26,16 @@ abstract class Handler
 		} else {
 			$this->handler = $handler;
 		}
-
-		$this->key = uniqid('chunk_job:', false);
-		Cache::put($this->key, serialize($this->handler), Carbon::now()->addWeek());
 	}
 
 	public function __serialize(): array
 	{
-		return ['key' => $this->key];
+		return CacheSerializer::serialize($this->handler);
 	}
 
 	public function __unserialize(array $data): void
 	{
-		$this->key = $data['key'];
-
-		$this->handler = unserialize(Cache::get($this->key));
+		$this->handler = CacheSerializer::unserialize($data);
 	}
 
 	/**
