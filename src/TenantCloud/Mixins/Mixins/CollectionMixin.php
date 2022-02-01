@@ -96,7 +96,7 @@ class CollectionMixin
 				->merge($other->keys())
 				->unique()
 				->values()
-				->map(fn ($key) => [$this->items[$key] ?? null, $other[$key] ?? null]);
+				->map(fn ($key) => [$this[$key] ?? null, $other[$key] ?? null]);
 		};
 	}
 
