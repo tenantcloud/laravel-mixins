@@ -50,10 +50,10 @@ class GenerateChunksJob implements ShouldQueue
 					new HandleChunkJob(
 						$this->serializedBuilder,
 						$this->params->key,
-						$items->pluck($this->params->key)->toArray(),
-						$this->params->handler
+						$items->pluck($this->params->keyAttributeName)->toArray(),
+						$this->params->handler,
 					)
 				)->onQueue($this->params->queue);
-			});
+			}, $this->params->key, $this->params->keyAttributeName);
 	}
 }

@@ -8,6 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
+use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -24,13 +25,25 @@ class HandleChunkJobTest extends TestCase
 	{
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
+		$checkCallback = static function ($items) {
+			self::assertInstanceOf(Collection::class, $items);
+			self::assertCount(0, $items);
+		};
+
+		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(new HandlerStub($checkCallback))))->handle();
+	}
+
+	public function testItShouldPassMockedClasses(): void
+	{
+		$serializedBuilder = new SerializableBuilder(TestStub::query());
+
 		$this->mock(HandlerStub::class, function (MockInterface $mock) {
 			$mock->shouldReceive('handle')
 				->with(Mockery::on(fn ($items) => $items instanceof Collection && $items->count() === 0))
 				->once();
 		});
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(HandlerStub::class)))->handle();
 	}
 
 	public function testFireHandleWithItem(): void
@@ -41,13 +54,13 @@ class HandleChunkJobTest extends TestCase
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		$this->mock(HandlerStub::class, function (MockInterface $mock) use ($model) {
-			$mock->shouldReceive('handle')
-				->with(Mockery::on(fn ($items) => $items instanceof Collection && $items->count() === 1 && $model->id === $items->first()->id))
-				->once();
-		});
+		$checkCallback = static function ($items) use ($model) {
+			self::assertInstanceOf(Collection::class, $items);
+			self::assertCount(1, $items);
+			self::assertSame($model->id, $items->first()->id);
+		};
 
-		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], HandlerStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], new ChunkHandler(new HandlerStub($checkCallback))))->handle();
 	}
 
 	public function testFireHandleWithMultipleItems(): void
@@ -62,13 +75,12 @@ class HandleChunkJobTest extends TestCase
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		$this->mock(HandlerStub::class, function (MockInterface $mock) {
-			$mock->shouldReceive('handle')
-				->with(Mockery::on(fn ($items) => $items instanceof Collection && $items->count() === 2))
-				->once();
-		});
-
-		(new HandleChunkJob($serializedBuilder, 'id', [$model->id, $model2->id], HandlerStub::class))->handle();
+		$checkCallback = static function ($items) use ($model, $model2) {
+			self::assertInstanceOf(Collection::class, $items);
+			self::assertCount(2, $items);
+			self::assertEquals([$model->id, $model2->id], $items->pluck('id')->all());
+		};
+		(new HandleChunkJob($serializedBuilder, 'id', [$model->id, $model2->id], new ChunkHandler(new HandlerStub($checkCallback))))->handle();
 	}
 
 	public function testAssertNotExistingHandler(): void
@@ -76,7 +88,7 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], 'App\Test'))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler('App\Test')))->handle();
 	}
 
 	public function testAssertInvalidHandler(): void
@@ -84,6 +96,6 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
-		(new HandleChunkJob($serializedBuilder, 'id', [], TestStub::class))->handle();
+		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(TestStub::class)))->handle();
 	}
 }
