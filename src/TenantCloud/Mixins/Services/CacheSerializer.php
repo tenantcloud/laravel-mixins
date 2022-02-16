@@ -4,13 +4,22 @@ namespace TenantCloud\Mixins\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Tests\Services\CacheSerializerTest;
 
+/**
+ * @see CacheSerializerTest
+ */
 class CacheSerializer
 {
 	public static function serialize($object, callable $serializeCallback = null): array
 	{
 		$serializeCallback ??= fn ($object) => serialize($object);
-		Cache::put($key = uniqid('mixins:serialized:', false), $serializeCallback($object), Carbon::now()->addWeek());
+		$serialized = $serializeCallback($object);
+
+		// todo: migrate to murmurhash3 once this requires php >= 8.1
+		if (!Cache::has($key = hash('sha256', $serialized))) {
+			Cache::put($key, $serialized, Carbon::now()->addWeek());
+		}
 
 		return ['key' => $key];
 	}
