@@ -211,12 +211,12 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	{
 		/*
 		 * @param callable $apply Callback for the query.
-		 * @param string $boolean 'and' or 'or'
+		 * @param string $boolean 'and', 'or', 'and not' or 'or not'
 		 *
 		 * @return Builder
 		 */
 		return function (callable $apply, string $boolean = 'and'): Builder {
-			Assert::True($boolean === 'and' || $boolean === 'or');
+			Assert::oneOf($boolean, ['and', 'or', 'and not', 'or not']);
 
 			$query = $this->getQuery();
 
