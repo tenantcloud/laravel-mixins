@@ -6,14 +6,18 @@ on:
 
 jobs:
     test:
-        name: Tests & PHPStan on PHP ${{ matrix.php }}
+        name: Tests & PHPStan on PHP ${{ matrix.php }} & TestBench {{ matrix.test-bench }}
 
         runs-on: ubuntu-latest
 
         strategy:
             fail-fast: true
             matrix:
-                php: [7.4, 8.0]
+                php: [7.4, 8.0, 8.1]
+                test-bench: [^6.0, ^7.0]
+                exclude:
+                    -   php: 7.4
+                        cs-fixer: ^7.0
 
         steps:
             -   name: Checkout code
@@ -39,7 +43,9 @@ jobs:
                         ${{ runner.os }}-php-
 
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress
+                run: |
+                    composer require "orchestra/testbench=${{ matrix.test-bench }}" --dev --no-update
+                    composer install --prefer-dist --no-progress
 
             -   name: Execute tests
                 run: composer test -- --colors=always
