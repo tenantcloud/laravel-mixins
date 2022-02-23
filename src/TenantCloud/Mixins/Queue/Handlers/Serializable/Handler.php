@@ -2,7 +2,7 @@
 
 namespace TenantCloud\Mixins\Queue\Handlers\Serializable;
 
-use Illuminate\Queue\SerializableClosure;
+use Laravel\SerializableClosure\SerializableClosure;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
 use TenantCloud\Mixins\Services\CacheSerializer;
