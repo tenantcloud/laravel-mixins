@@ -2,8 +2,8 @@
 
 namespace Tests\EloquentBuilderMixin\Stubs;
 
-use Illuminate\Queue\SerializableClosure;
 use Illuminate\Support\Collection;
+use Laravel\SerializableClosure\SerializableClosure;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 
 class HandlerStub implements QueuedChunkHandler
