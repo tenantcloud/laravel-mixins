@@ -17,8 +17,13 @@ class CacheSerializer
 		$serialized = $serializeCallback($object);
 
 		// todo: migrate to murmurhash3 once this requires php >= 8.1
-		if (!Cache::has($key = hash('sha256', $serialized))) {
-			Cache::put($key, $serialized, Carbon::now()->addWeek());
+		if (
+			!Cache::has($key = hash('sha256', $serialized)) ||
+			Carbon::createFromTimestamp(Cache::get($key . ':lifetime'))->subDay()->isPast()
+		) {
+			$lifetime = Carbon::now()->addWeek();
+			Cache::put($key, $serialized, $lifetime);
+			Cache::put($key . ':lifetime', $lifetime->getTimestamp(), $lifetime);
 		}
 
 		return ['key' => $key];
