@@ -41,9 +41,10 @@ class ChunkWithQueueTest extends TestCase
 
 		$this->generateTestModel();
 
-		$this->expectExceptionMessage('Argument date is :' . now()->toDateTimeString());
-
 		TestStub::query()->chunkWithQueue(new HandlerWithConstructorStub(now()), ChunkWithQueueSettings::defaultSettings());
+
+		self::assertNotNull(HandlerWithConstructorStub::$calledThis);
+		self::assertEquals(now(), HandlerWithConstructorStub::$calledThis->date);
 	}
 
 	public function testMultipleJobsSuccess(): void
