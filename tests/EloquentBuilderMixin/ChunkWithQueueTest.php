@@ -37,13 +37,13 @@ class ChunkWithQueueTest extends TestCase
 
 	public function testHandlerParametersPassed(): void
 	{
+		Carbon::setTestNow('2022-07-20 12:00:00');
+
 		$this->generateTestModel();
 
-		$date = new Carbon($this->faker->dateTime);
+		$this->expectExceptionMessage('Argument date is :' . now()->toDateTimeString());
 
-		$this->expectExceptionMessage('Argument date is :' . $date->toDateTimeString());
-
-		TestStub::query()->chunkWithQueue(new HandlerWithConstructorStub($date), ChunkWithQueueSettings::defaultSettings());
+		TestStub::query()->chunkWithQueue(new HandlerWithConstructorStub(now()), ChunkWithQueueSettings::defaultSettings());
 	}
 
 	public function testMultipleJobsSuccess(): void
