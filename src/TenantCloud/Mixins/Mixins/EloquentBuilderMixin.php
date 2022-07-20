@@ -3,6 +3,7 @@
 namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -319,6 +320,18 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			}
 
 			return true;
+		};
+	}
+
+	/**
+	 * Similar to {@see Builder::setModel()}, but only sets the model, without the table.
+	 */
+	public function setOnlyModel(): callable
+	{
+		return function (Model $model) {
+			$this->model = $model;
+
+			return $this;
 		};
 	}
 }
