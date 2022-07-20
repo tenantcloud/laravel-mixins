@@ -2,11 +2,12 @@
 
 namespace TenantCloud\Mixins\Mixins;
 
-use Closure;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Tests\StrMixin\StrExtractApostrophesTest;
+use Tests\StrMixin\StrReplaceLastRegexTest;
 use Tests\StrMixin\StrTrimInsideTest;
+use Tests\StrMixin\StrUniqueRandomTest;
 
 /**
  * @mixin Str
@@ -22,8 +23,6 @@ class StrMixin
 	 *  - removes spaces from inside
 	 *
 	 * @see StrTrimInsideTest
-	 *
-	 * @return Closure
 	 */
 	public function insideTrim(): callable
 	{
@@ -34,8 +33,6 @@ class StrMixin
 	 * Extract apostrophes from a string
 	 *
 	 * @see StrExtractApostrophesTest
-	 *
-	 * @return Closure
 	 */
 	public function extractApostrophes(): callable
 	{
@@ -44,6 +41,8 @@ class StrMixin
 
 	/**
 	 * Generate a unique string of given length, based on uuids.
+	 *
+	 * @see StrUniqueRandomTest
 	 */
 	public function uniqueRandom(): callable
 	{
@@ -67,11 +66,33 @@ class StrMixin
 	 * Extract apostrophes from a string
 	 *
 	 * @see StrExtractApostrophesTest
-	 *
-	 * @return Closure
 	 */
 	public function hash(): callable
 	{
 		return static fn (string $value): string => str_replace(["'", '&#39;', '’'], '', $value);
+	}
+
+	/**
+	 * Replaces every char that matches the regex from the end, skipping given amount of characters.
+	 *
+	 * Example: replaceLastRegex('112-232-133', '/[0-9]/', '*', 4) -> '***-**2-133'
+	 *
+	 * @see StrReplaceLastRegexTest
+	 */
+	public function replaceLastRegex(): callable
+	{
+		return function (string $input, string $match, string $replace, int $skip = 0) {
+			for ($i = mb_strlen($input) - 1; $i >= 0; $i--) {
+				if ($skip > 0 && preg_match($match, $input[$i])) {
+					$skip--;
+
+					continue;
+				}
+
+				$input[$i] = preg_replace($match, $replace, $input[$i]);
+			}
+
+			return $input;
+		};
 	}
 }
