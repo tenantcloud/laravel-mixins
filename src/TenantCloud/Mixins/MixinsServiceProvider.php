@@ -5,6 +5,7 @@ namespace TenantCloud\Mixins;
 use Carbon\Carbon;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use TenantCloud\Mixins\Mixins\ArrMixin;
 use TenantCloud\Mixins\Mixins\CarbonMixin;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Mixins\HasOneOrManyMixin;
 use TenantCloud\Mixins\Mixins\MySqlGrammarMixin;
 use TenantCloud\Mixins\Mixins\QueryBuilderMixin;
 use TenantCloud\Mixins\Mixins\RequestGuardMixin;
@@ -40,5 +42,6 @@ class MixinsServiceProvider extends ServiceProvider
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
 		EloquentBuilder::mixin(new EloquentBuilderMixin());
+		HasOneOrMany::mixin(new HasOneOrManyMixin());
 	}
 }

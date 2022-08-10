@@ -3,6 +3,7 @@
 namespace Tests\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TestStub extends Model
 {
@@ -11,4 +12,9 @@ class TestStub extends Model
 	protected $fillable = [
 		'name',
 	];
+
+	public function children(): HasMany
+	{
+		return $this->hasMany(self::class, 'parent_id');
+	}
 }

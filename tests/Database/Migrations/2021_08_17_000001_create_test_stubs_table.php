@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Tests\Database\Models\TestStub;
 
 class CreateTestStubsTable extends Migration
 {
@@ -15,6 +16,8 @@ class CreateTestStubsTable extends Migration
 	{
 		Schema::create('test_stubs', function (Blueprint $table) {
 			$table->bigIncrements('id');
+			$table->foreignIdFor(TestStub::class, 'parent_id')
+				->nullable();
 			$table->string('name');
 			$table->timestamps();
 		});
