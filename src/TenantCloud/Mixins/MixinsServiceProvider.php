@@ -17,6 +17,7 @@ use TenantCloud\Mixins\Mixins\ArrMixin;
 use TenantCloud\Mixins\Mixins\CarbonMixin;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
+use TenantCloud\Mixins\Mixins\HasOneOrManyMixin;
 use TenantCloud\Mixins\Mixins\MySqlGrammarMixin;
 use TenantCloud\Mixins\Mixins\QueryBuilderMixin;
 use TenantCloud\Mixins\Mixins\RequestGuardMixin;
@@ -41,8 +42,6 @@ class MixinsServiceProvider extends ServiceProvider
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
 		EloquentBuilder::mixin(new EloquentBuilderMixin());
-		HasOneOrMany::macro('disassociate', fn () => $this->toBase()->update([
-			$this->getQualifiedForeignKeyName() => null,
-		]));
+		HasOneOrMany::mixin(new HasOneOrManyMixin());
 	}
 }
