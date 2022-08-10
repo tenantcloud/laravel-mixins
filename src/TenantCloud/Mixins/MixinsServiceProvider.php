@@ -5,6 +5,7 @@ namespace TenantCloud\Mixins;
 use Carbon\Carbon;
 use Illuminate\Auth\RequestGuard;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Http\Request;
@@ -40,5 +41,8 @@ class MixinsServiceProvider extends ServiceProvider
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
 		EloquentBuilder::mixin(new EloquentBuilderMixin());
+		HasOneOrMany::macro('disassociate', fn () => $this->toBase()->update([
+			$this->getQualifiedForeignKeyName() => null,
+		]));
 	}
 }
