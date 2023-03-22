@@ -27,6 +27,7 @@ class StrPossessiveTest extends TestCase
 			'Greg',
 			'Greg\'s',
 		];
+
 		yield [
 			'Charles',
 			'Charles\'',
