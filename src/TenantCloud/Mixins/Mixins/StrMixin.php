@@ -98,7 +98,7 @@ class StrMixin
 	}
 
 	/**
-	 * Adds an apostrophe+s or apostrophe when needed to proper nouns. produces something like: Greg's or Charles'
+	 * Adds an apostrophe+s or apostrophe when needed to proper nouns
 	 *
 	 * Example: Greg -> Greg's
 	 * 			Charles -> Charles'
