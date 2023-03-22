@@ -5,6 +5,7 @@ namespace TenantCloud\Mixins\Mixins;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 use Tests\StrMixin\StrExtractApostrophesTest;
+use Tests\StrMixin\StrPossessiveTest;
 use Tests\StrMixin\StrReplaceLastRegexTest;
 use Tests\StrMixin\StrTrimInsideTest;
 use Tests\StrMixin\StrUniqueRandomTest;
@@ -93,6 +94,25 @@ class StrMixin
 			}
 
 			return $input;
+		};
+	}
+
+	/**
+	 * Adds an apostrophe+s or apostrophe when needed to proper nouns
+	 *
+	 * Example: Greg -> Greg's
+	 * 			Charles -> Charles'
+	 *
+	 * @see StrPossessiveTest
+	 */
+	public function possessive(): callable
+	{
+		return function (string $value) {
+			if (Str::endsWith(mb_strtolower($value), 's')) {
+				return $value . '\'';
+			}
+
+			return $value . '\'s';
 		};
 	}
 }
