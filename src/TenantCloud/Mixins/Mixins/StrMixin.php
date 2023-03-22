@@ -108,7 +108,7 @@ class StrMixin
 	public function possessive(): callable
 	{
 		return function (string $value) {
-			if (Str::endsWith(strtolower($value), 's')) {
+			if (Str::endsWith(mb_strtolower($value), 's')) {
 				return $value . '\'';
 			}
 
