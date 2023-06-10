@@ -7,11 +7,11 @@ use Tests\Database\Models\TestStub;
 
 class TestStubFactory extends Factory
 {
-	/** {@inheritdoc} */
+	/** @inheritDoc */
 	protected $model = TestStub::class;
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function definition()
 	{

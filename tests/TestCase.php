@@ -11,7 +11,7 @@ class TestCase extends BaseTestCase
 	use WithFaker;
 
 	/**
-	 * {@inheritDoc}
+	 * @inheritDoc
 	 */
 	protected function getPackageProviders($app): array
 	{
@@ -21,7 +21,7 @@ class TestCase extends BaseTestCase
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * @inheritDoc
 	 */
 	protected function defineDatabaseMigrations(): void
 	{
