@@ -248,7 +248,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	/**
 	 * Passthru for this mixin.
 	 *
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	public function selectCaseIn(): callable
 	{
