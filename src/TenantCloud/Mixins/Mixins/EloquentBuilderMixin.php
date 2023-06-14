@@ -3,6 +3,7 @@
 namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -31,9 +32,9 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 * Example usage:
 	 *
 	 * $query->withHas('properties')
-	 * 		->withHas(['properties as has_cool_properties' => static function ($query) {
-	 * 			return $query->where('is_cool', true);
-	 * 		});
+	 *        ->withHas(['properties as has_cool_properties' => static function ($query) {
+	 *            return $query->where('is_cool', true);
+	 *        });
 	 */
 	public function withHas(): callable
 	{
@@ -100,10 +101,10 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 * Example usage:
 	 *
 	 * $query->withAggregate([
-	 * 		'incomes as incomes_sum',
-	 * 		'employments as employment_incomes_sum' => static function ($query) {
-	 * 			return $query->where('is_current', true);
-	 * 		},
+	 *        'incomes as incomes_sum',
+	 *        'employments as employment_incomes_sum' => static function ($query) {
+	 *            return $query->where('is_current', true);
+	 *        },
 	 * ], new Expression('sum(income)'));
 	 */
 	public function withAggregate(): callable
@@ -166,7 +167,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function withSum(): callable
 	{
-		return fn ($relations, string $column) => $this->withAggregate($relations, new Expression("coalesce(sum({$column}), 0)"));
+		return fn($relations, string $column) => $this->withAggregate($relations, new Expression("coalesce(sum({$column}), 0)"));
 	}
 
 	/**
@@ -186,7 +187,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			]);
 
 			$bindings = collect($cases)
-				->flatMap(static fn ($value, $key) => [$key, $value])
+				->flatMap(static fn($value, $key) => [$key, $value])
 				->all();
 
 			return $query->connection->update(
@@ -197,16 +198,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	}
 
 	/**
-	 * Same as ->whereNested(), except it works with selects, joins, withCounts etc. inside of the callback.
-	 *
-	 * This idea was stolen from {@see Builder::callScope}.
-	 *
-	 * The way it works is the following:
-	 *  1. It saves ->where clauses that exist BEFORE calling a callback.
-	 *  2. It calls a callback.
-	 *  3. It detects which ->where clauses were added by the callback
-	 *     (given that we know which ones were present before calling the callback)
-	 *  4. It deletes added ->where clauses from the query and re-adds them with nesting and given boolean (and/or).
+	 * @see QueryBuilderMixin::customWhereNested()
 	 */
 	public function customWhereNested(): callable
 	{
@@ -217,8 +209,19 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 		 * @return Builder
 		 */
 		return function (callable $apply, string $boolean = 'and'): Builder {
-			$this->getQuery()
-				->customWhereNested(fn () => $apply($this), $boolean);
+			$this->getQuery()->customWhereNested(fn() => $apply($this), $boolean);
+
+			return $this;
+		};
+	}
+
+	/**
+	 * @see QueryBuilderMixin::whereSubOther()
+	 */
+	public function whereSubOther(): callable
+	{
+		return function (string $column, string $operator, $query, string $boolean = 'and') {
+			$this->getQuery()->whereSubOther($column, $operator, $query, $boolean);
 
 			return $this;
 		};
@@ -279,7 +282,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				return true;
 			}
 
-			$maxChunkNumber = (int) ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
+			$maxChunkNumber = (int)ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
 
 			$params = new ChunkParams(
 				$handler,
