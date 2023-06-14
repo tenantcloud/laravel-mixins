@@ -2,7 +2,7 @@
 
 namespace TenantCloud\Mixins\Mixins;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -217,29 +217,8 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 		 * @return Builder
 		 */
 		return function (callable $apply, string $boolean = 'and'): Builder {
-			Assert::oneOf($boolean, ['and', 'or', 'and not', 'or not']);
-
-			$query = $this->getQuery();
-
-			// We will keep track of how many wheres are on the query before running the
-			// scope so that we can properly group the added scope constraints in the
-			// query as their own isolated nested where statement and avoid issues.
-			$originalWhereCount = $query->wheres === null ? 0 : count($query->wheres);
-
-			$apply($this);
-
-			// If any new wheres were added..
-			if (count((array) $query->wheres) > $originalWhereCount) {
-				// Here we'll remove all of the added wheres from the query and write it down to $addedWheres.
-				$addedWheres = array_splice($query->wheres, $originalWhereCount);
-
-				// Then we'll create another query, containing those new added wheres.
-				$addedWheresFakeQuery = $this->model->newModelQuery()->getQuery();
-				$addedWheresFakeQuery->wheres = $addedWheres;
-
-				// And tell Eloquent to add it as "whereNested", basically.
-				$query->addNestedWhereQuery($addedWheresFakeQuery, $boolean);
-			}
+			$this->getQuery()
+				->customWhereNested(fn () => $apply($this), $boolean);
 
 			return $this;
 		};
