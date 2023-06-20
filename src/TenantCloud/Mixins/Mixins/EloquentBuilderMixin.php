@@ -3,7 +3,6 @@
 namespace TenantCloud\Mixins\Mixins;
 
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Arr;
@@ -19,7 +18,6 @@ use TenantCloud\Mixins\Queue\Handlers\Serializable\Handler;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\ItemHandler;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use Tests\EloquentBuilderMixin\ChunkWithQueueTest;
-use Webmozart\Assert\Assert;
 
 /**
  * @mixin Builder
@@ -167,7 +165,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	 */
 	public function withSum(): callable
 	{
-		return fn($relations, string $column) => $this->withAggregate($relations, new Expression("coalesce(sum({$column}), 0)"));
+		return fn ($relations, string $column) => $this->withAggregate($relations, new Expression("coalesce(sum({$column}), 0)"));
 	}
 
 	/**
@@ -187,7 +185,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			]);
 
 			$bindings = collect($cases)
-				->flatMap(static fn($value, $key) => [$key, $value])
+				->flatMap(static fn ($value, $key) => [$key, $value])
 				->all();
 
 			return $query->connection->update(
@@ -209,7 +207,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 		 * @return Builder
 		 */
 		return function (callable $apply, string $boolean = 'and'): Builder {
-			$this->getQuery()->customWhereNested(fn() => $apply($this), $boolean);
+			$this->getQuery()->customWhereNested(fn () => $apply($this), $boolean);
 
 			return $this;
 		};
@@ -282,7 +280,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 				return true;
 			}
 
-			$maxChunkNumber = (int)ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
+			$maxChunkNumber = (int) ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
 
 			$params = new ChunkParams(
 				$handler,

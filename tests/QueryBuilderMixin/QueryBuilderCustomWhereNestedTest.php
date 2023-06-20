@@ -4,7 +4,6 @@ namespace Tests\QueryBuilderMixin;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\LazyCollection;
 use TenantCloud\Mixins\QueryBuilderMixin;
 use Tests\TestCase;
 
