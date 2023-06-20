@@ -21,8 +21,9 @@
 	"require-dev": {
 		"phpunit/phpunit": "^9.0|^10.0",
 		"orchestra/testbench": "^7.0|^8.5",
-		"friendsofphp/php-cs-fixer": "~3.17",
-		"tenantcloud/php-cs-fixer-rule-sets": "~2.0"
+		"php-cs-fixer/shim": "~3.17.0",
+		"tenantcloud/php-cs-fixer-rule-sets": "~2.0.2",
+		"phpstan/phpstan": "~1.10.0"
 	},
 	"autoload": {
 		"psr-0": {
@@ -37,8 +38,8 @@
 	"scripts": {
 		"test": "vendor/bin/phpunit",
 		"test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-		"cs-fix": "./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -v --show-progress=dots",
-		"phpstan":  "./tools/phpstan/vendor/bin/phpstan analyse",
+		"cs-fix": "vendor/bin/php-cs-fixer fix -v --show-progress=dots",
+		"phpstan":  "vendor/bin/phpstan analyse",
 		"testbench": "vendor/bin/testbench"
 	},
 	"extra": {
