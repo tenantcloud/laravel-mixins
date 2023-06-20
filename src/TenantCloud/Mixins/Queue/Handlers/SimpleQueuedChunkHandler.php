@@ -3,7 +3,9 @@
 namespace TenantCloud\Mixins\Queue\Handlers;
 
 use Closure;
+
 use function dispatch;
+
 use Illuminate\Support\Collection;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;

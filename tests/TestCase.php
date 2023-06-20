@@ -10,9 +10,6 @@ class TestCase extends BaseTestCase
 {
 	use WithFaker;
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function getPackageProviders($app): array
 	{
 		return [
@@ -20,9 +17,6 @@ class TestCase extends BaseTestCase
 		];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	protected function defineDatabaseMigrations(): void
 	{
 		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');

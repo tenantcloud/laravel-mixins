@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -39,6 +40,7 @@ class MixinsServiceProvider extends ServiceProvider
 		Collection::mixin(new CollectionMixin());
 		MySqlGrammar::mixin(new MySqlGrammarMixin());
 		QueryBuilder::mixin(new QueryBuilderMixin());
+		JoinClause::mixin(new QueryBuilderMixin());
 		Request::mixin(new RequestMixin());
 		RequestGuard::mixin(new RequestGuardMixin());
 		EloquentBuilder::mixin(new EloquentBuilderMixin());

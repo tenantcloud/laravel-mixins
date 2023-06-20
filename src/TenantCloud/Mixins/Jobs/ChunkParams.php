@@ -24,7 +24,7 @@ class ChunkParams
 		string $keyAttributeName,
 		int $chunkSize,
 		int $pieceSize,
-		?string $queue = null
+		string $queue = null
 	) {
 		$this->handler = $handler;
 		$this->key = $key;

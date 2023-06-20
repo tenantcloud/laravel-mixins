@@ -26,8 +26,6 @@ class QueryOptions
 
 	/**
 	 * We want to protect these values from external changes. But read is allowed protected attributes.
-	 *
-	 * @param mixed $name
 	 */
 	public function __get($name)
 	{

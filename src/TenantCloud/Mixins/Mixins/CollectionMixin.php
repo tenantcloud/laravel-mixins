@@ -46,9 +46,6 @@ class CollectionMixin
 	 * An extension of the {@see Collection::sortBy()} method that allows for sorting against as many different
 	 * keys. Uses a combination of {@see Collection::sortBy()} and {@see Collection::groupBy()} to achieve this.
 	 *
-	 * @param array $keys An associative array that uses the key to sort by (which accepts dot separated values,
-	 *                    as {@see Collection::sortBy()} would) and the value is the order (either ASC or DESC)
-	 *
 	 * @see CollectionSortByMultiTest
 	 */
 	public function sortByMulti(): callable
