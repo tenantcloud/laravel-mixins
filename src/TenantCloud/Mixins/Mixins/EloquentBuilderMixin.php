@@ -267,7 +267,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 			$maxKeyValue = optional(
 				DB::query()
 					->fromSub(
-						$this->clone()
+						($settings->queryOptions->getMaxKeyValueFromNewModelQuery ? $this->getModel()->newQuery() : $this->clone())
 							->toBase()
 							->orderBy($settings->queryOptions->keyName, 'desc')
 							->limit(1),
