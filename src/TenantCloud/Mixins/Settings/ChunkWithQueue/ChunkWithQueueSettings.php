@@ -4,22 +4,11 @@ namespace TenantCloud\Mixins\Settings\ChunkWithQueue;
 
 class ChunkWithQueueSettings
 {
-	public QueryOptions $queryOptions;
-
-	public ChunkOptions $chunkOptions;
-
-	public QueueOptions $queueOptions;
-
-	public array $handlerParameters = [];
-
 	public function __construct(
-		QueryOptions $queryOptions,
-		ChunkOptions $chunkOptions,
-		QueueOptions $queueOptions
+		public QueryOptions $queryOptions,
+		public ChunkOptions $chunkOptions,
+		public QueueOptions $queueOptions
 	) {
-		$this->queryOptions = $queryOptions;
-		$this->chunkOptions = $chunkOptions;
-		$this->queueOptions = $queueOptions;
 	}
 
 	public static function defaultSettings(): self
