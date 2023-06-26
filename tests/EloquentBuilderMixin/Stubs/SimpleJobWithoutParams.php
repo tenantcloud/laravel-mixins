@@ -3,15 +3,13 @@
 namespace Tests\EloquentBuilderMixin\Stubs;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
+use Tests\Database\Models\TestStub;
 
 class SimpleJobWithoutParams implements ShouldQueue
 {
-	public Model $item;
-
-	public function __construct(Model $item)
-	{
-		$this->item = $item;
+	public function __construct(
+		public readonly TestStub $item
+	) {
 	}
 
 	public function handle(): void

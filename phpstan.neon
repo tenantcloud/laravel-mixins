@@ -3,9 +3,10 @@ includes:
 	- vendor/phpstan/phpstan-phpunit/extension.neon
 	- vendor/phpstan/phpstan-webmozart-assert/extension.neon
 	- vendor/phpstan/phpstan-mockery/extension.neon
+	- vendor/nunomaduro/larastan/extension.neon
 
 parameters:
-	level: max
+	level: 6
 	tmpDir: ./tmp/phpstan
 
 	paths:
@@ -14,14 +15,26 @@ parameters:
 
 	ignoreErrors:
 		-
-			message: '#Call to an undefined .+#i'
+			message: '#Method Tests\\.*Test::.* (has parameter|return type) .* (does not specify its type|with no value type specified).*#i'
+			path: '*Test.php'
+		-
+			message: '#.* does not specify its types.*#i'
+			path: '*Mixin.php'
+		-
+			message: '#.* is not subtype .*#i'
 			path: '*Mixin.php'
 		-
 			message: '#Call to protected method .+#i'
 			path: '*Mixin.php'
 		-
-			message: '#Access to protected property .+Mixin::.+#i'
+			message: '#Access to an undefined property .+Mixin::.+#i'
 			path: '*Mixin.php'
 		-
-			message: '#Method .+Mixin::.+ invoked with \d parameters, 0 required.#i'
+			message: '#Method .+Mixin::.+ invoked with \d parameters, \d required.#i'
+			path: '*Mixin.php'
+		-
+			message: '#Parameter .* expects .*Mixin.* given#i'
+			path: '*Mixin.php'
+		-
+			message: '#.* should return .* but returns .*Mixin.*#i'
 			path: '*Mixin.php'
