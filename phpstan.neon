@@ -1,12 +1,16 @@
 includes:
 	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-webmozart-assert/extension.neon
+	- vendor/phpstan/phpstan-mockery/extension.neon
 
 parameters:
-	level: 1
+	level: max
 	tmpDir: ./tmp/phpstan
 
 	paths:
 		- src
+		- tests
 
 	ignoreErrors:
 		-

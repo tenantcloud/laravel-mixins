@@ -1,16 +1,9 @@
 {
 	"name": "tenantcloud/laravel-mixins",
 	"description": "A collection of laravel mixins",
-	"minimum-stability": "stable",
 	"license": "MIT",
-	"authors": [
-		{
-			"name": "Team Tenantcloud",
-			"email": "info@tenantcloud.com"
-		}
-	],
 	"require": {
-		"php": "^8.1",
+		"php": ">=8.1",
 		"illuminate/database": "^9.0|^10.0",
 		"illuminate/auth": "^9.0|^10.0",
 		"illuminate/support": "^9.0|^10.0",
@@ -19,11 +12,14 @@
 		"laravel/serializable-closure": "^1.1"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^9.0|^10.0",
-		"orchestra/testbench": "^7.0|^8.5",
-		"php-cs-fixer/shim": "~3.17.0",
-		"tenantcloud/php-cs-fixer-rule-sets": "~2.0.2",
-		"phpstan/phpstan": "~1.10.0"
+		"pestphp/pest": "^2.8",
+		"php-cs-fixer/shim": "~3.19.2",
+		"tenantcloud/php-cs-fixer-rule-sets": "~2.1.0",
+		"phpstan/phpstan": "~1.10.21",
+		"phpstan/phpstan-phpunit": "^1.3",
+		"phpstan/phpstan-webmozart-assert": "^1.2",
+		"phpstan/phpstan-mockery": "^1.1",
+		"orchestra/testbench": "^7.0|^8.5"
 	},
 	"autoload": {
 		"psr-0": {
@@ -36,11 +32,18 @@
 		}
 	},
 	"scripts": {
-		"test": "vendor/bin/phpunit",
+		"test": "vendor/bin/pest",
 		"test-coverage": "vendor/bin/phpunit --coverage-html coverage",
 		"cs-fix": "vendor/bin/php-cs-fixer fix -v --show-progress=dots",
 		"phpstan":  "vendor/bin/phpstan analyse",
 		"testbench": "vendor/bin/testbench"
+	},
+	"minimum-stability": "stable",
+	"prefer-stable": true,
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true
+		}
 	},
 	"extra": {
 		"laravel": {
