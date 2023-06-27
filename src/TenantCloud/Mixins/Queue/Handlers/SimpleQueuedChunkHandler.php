@@ -21,8 +21,7 @@ class SimpleQueuedChunkHandler implements QueuedChunkHandler
 	 */
 	public function __construct(
 		private readonly mixed $itemHandler
-	) {
-	}
+	) {}
 
 	public function handle(Collection $items): void
 	{

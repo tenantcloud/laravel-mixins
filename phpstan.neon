@@ -15,7 +15,7 @@ parameters:
 
 	ignoreErrors:
 		-
-			message: '#Method Tests\\.*Test::.* (has parameter|return type) .* (does not specify its type|with no value type specified).*#i'
+			message: '#Method Tests\\.*Test::.* (has parameter|return type) .* (does not specify its type|no value type specified).*#i'
 			path: '*Test.php'
 		-
 			message: '#.* does not specify its types.*#i'

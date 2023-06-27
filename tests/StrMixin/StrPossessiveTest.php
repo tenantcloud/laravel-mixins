@@ -2,7 +2,6 @@
 
 namespace Tests\StrMixin;
 
-use Generator;
 use Illuminate\Support\Str;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
@@ -11,7 +10,7 @@ use Tests\TestCase;
 class StrPossessiveTest extends TestCase
 {
 	/**
-	 * @dataProvider possessiveProvider
+	 * @dataProvider replacesLastRegexProvider
 	 */
 	public function testReplacesLastRegex(string $value, string $expectedResult): void
 	{
@@ -21,7 +20,7 @@ class StrPossessiveTest extends TestCase
 		);
 	}
 
-	public function possessiveProvider(): Generator
+	public static function replacesLastRegexProvider(): iterable
 	{
 		yield [
 			'Greg',

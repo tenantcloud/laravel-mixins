@@ -21,8 +21,7 @@ class SimpleJob implements ShouldQueue, QueuedItemHandler
 	public function __construct(
 		public readonly string $name,
 		public readonly Carbon $updatedTime
-	) {
-	}
+	) {}
 
 	public function setItem(Model $item): static
 	{

@@ -172,7 +172,7 @@ class ChunkWithQueueTest extends TestCase
 	}
 
 	/**
-	 * @param null|callable(TestStubFactory $factory):TestStubFactory $callback
+	 * @param callable(TestStubFactory):TestStubFactory|null $callback
 	 */
 	private function generateTestModel(callable $callback = null): TestStub
 	{

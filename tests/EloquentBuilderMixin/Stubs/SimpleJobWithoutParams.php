@@ -9,8 +9,7 @@ class SimpleJobWithoutParams implements ShouldQueue
 {
 	public function __construct(
 		public readonly TestStub $item
-	) {
-	}
+	) {}
 
 	public function handle(): void
 	{

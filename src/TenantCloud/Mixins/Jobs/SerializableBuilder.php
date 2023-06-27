@@ -17,8 +17,7 @@ class SerializableBuilder
 	 */
 	public function __construct(
 		public readonly Builder $builder
-	) {
-	}
+	) {}
 
 	public function __serialize(): array
 	{

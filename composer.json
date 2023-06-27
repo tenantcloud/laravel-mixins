@@ -12,7 +12,7 @@
 		"laravel/serializable-closure": "^1.1"
 	},
 	"require-dev": {
-		"pestphp/pest": "^2.8",
+		"pestphp/pest": "^1.0|^2.8",
 		"php-cs-fixer/shim": "~3.19.2",
 		"tenantcloud/php-cs-fixer-rule-sets": "~3.0.0",
 		"phpstan/phpstan": "~1.10.21",

@@ -33,8 +33,7 @@ class GenerateChunksJob implements ShouldQueue
 		private readonly SerializableBuilder $serializedBuilder,
 		private readonly ChunkParams $params,
 		private readonly int $chunkNumber
-	) {
-	}
+	) {}
 
 	public function handle(): void
 	{
