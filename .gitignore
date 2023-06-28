@@ -8,6 +8,7 @@
 
 # Build/coverage
 /build
+/coverage
 
 # Cache
 .php-cs-fixer.cache

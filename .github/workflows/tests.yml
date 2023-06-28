@@ -1,17 +1,15 @@
 name: Tests
 
-on:
-    push:
-    pull_request:
+on: [push, pull_request]
 
 jobs:
     phpunit:
-        name: PHPUnit on PHP ${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
+        name: PHPUnit on PHP v${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true
             matrix:
-                php: [ 8.1 , 8.2]
+                php: [ 8.1, 8.2 ]
                 test-bench: [ ^7.0, ^8.0 ]
 
         steps:
@@ -76,7 +74,7 @@ jobs:
                 run: composer cs-fix -- --dry-run --diff --using-cache=no
 
     phpstan:
-        name: PHPStan on PHP ${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
+        name: PHPStan on PHP v${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: true

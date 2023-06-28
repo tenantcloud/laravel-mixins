@@ -1,0 +1,2 @@
+providers:
+    - TenantCloud\Skeleton\SkeletonServiceProvider
