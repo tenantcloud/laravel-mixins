@@ -24,8 +24,8 @@
         "nunomaduro/larastan": "^2.6"
     },
     "autoload": {
-        "psr-0": {
-            "": "src/"
+        "psr-4": {
+            "TenantCloud\\Mixins\\": "src/"
         }
     },
     "autoload-dev": {
