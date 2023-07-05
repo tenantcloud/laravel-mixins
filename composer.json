@@ -36,9 +36,9 @@
     "scripts": {
         "test": "vendor/bin/pest",
         "cs-fix": "vendor/bin/php-cs-fixer fix -v --show-progress=dots",
-        "phpstan": "vendor/bin/phpstan analyse",
         "testbench": "vendor/bin/testbench",
-        "coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage-html coverage"
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage-html coverage",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
