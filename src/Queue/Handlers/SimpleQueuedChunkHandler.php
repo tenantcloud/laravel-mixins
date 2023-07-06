@@ -2,23 +2,26 @@
 
 namespace TenantCloud\Mixins\Queue\Handlers;
 
-use Closure;
-
-use function dispatch;
-
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
 
+use function dispatch;
+
+/**
+ * @template TModel of Model
+ *
+ * @template-implements QueuedChunkHandler<TModel>
+ */
 class SimpleQueuedChunkHandler implements QueuedChunkHandler
 {
-	/** @var QueuedItemHandler|Closure */
-	protected $itemHandler;
-
-	public function __construct($handler)
-	{
-		$this->itemHandler = $handler;
-	}
+	/**
+	 * @param QueuedItemHandler<TModel>|callable(TModel): mixed $itemHandler
+	 */
+	public function __construct(
+		private readonly mixed $itemHandler
+	) {}
 
 	public function handle(Collection $items): void
 	{

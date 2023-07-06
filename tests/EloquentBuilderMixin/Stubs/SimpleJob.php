@@ -7,24 +7,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedItemHandler;
+use Tests\Database\Models\TestStub;
 
+/**
+ * @implements QueuedItemHandler<TestStub>
+ */
 class SimpleJob implements ShouldQueue, QueuedItemHandler
 {
 	use Queueable;
 
-	public Model $item;
+	public TestStub $item;
 
-	public string  $name;
+	public function __construct(
+		public readonly string $name,
+		public readonly Carbon $updatedTime
+	) {}
 
-	public Carbon $updatedTime;
-
-	public function __construct(string $name, Carbon $updatedTime)
-	{
-		$this->name = $name;
-		$this->updatedTime = $updatedTime;
-	}
-
-	public function setItem(Model $item): QueuedItemHandler
+	public function setItem(Model $item): static
 	{
 		$this->item = $item;
 

@@ -20,6 +20,7 @@ class QueryBuilderLazyTest extends TestCase
 			->lazy();
 
 		// No need to test any more as this was backported and is covered with tests by Laravel itself.
+		/* @phpstan-ignore-next-line */
 		self::assertInstanceOf(LazyCollection::class, $lazy);
 	}
 }

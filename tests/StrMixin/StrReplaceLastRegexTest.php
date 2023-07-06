@@ -2,7 +2,6 @@
 
 namespace Tests\StrMixin;
 
-use Generator;
 use Illuminate\Support\Str;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
@@ -21,7 +20,7 @@ class StrReplaceLastRegexTest extends TestCase
 		);
 	}
 
-	public function replacesLastRegexProvider(): Generator
+	public static function replacesLastRegexProvider(): iterable
 	{
 		yield [
 			'***-**-****',

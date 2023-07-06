@@ -8,8 +8,7 @@ class ChunkWithQueueSettings
 		public QueryOptions $queryOptions,
 		public ChunkOptions $chunkOptions,
 		public QueueOptions $queueOptions
-	) {
-	}
+	) {}
 
 	public static function defaultSettings(): self
 	{

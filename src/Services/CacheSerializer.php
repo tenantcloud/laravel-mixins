@@ -11,7 +11,15 @@ use Tests\Services\CacheSerializerTest;
  */
 class CacheSerializer
 {
-	public static function serialize($object, callable $serializeCallback = null): array
+	/**
+	 * @template TObject
+	 *
+	 * @param TObject                       $object
+	 * @param callable(TObject):string|null $serializeCallback
+	 *
+	 * @return array{ key: string }
+	 */
+	public static function serialize(mixed $object, callable $serializeCallback = null): array
 	{
 		$serializeCallback ??= fn ($object) => serialize($object);
 		$serialized = $serializeCallback($object);
@@ -29,7 +37,15 @@ class CacheSerializer
 		return ['key' => $key];
 	}
 
-	public static function unserialize(array $data, callable $unserializeCallback = null)
+	/**
+	 * @template TObject
+	 *
+	 * @param array{ key: string }          $data
+	 * @param callable(string):TObject|null $unserializeCallback
+	 *
+	 * @return TObject
+	 */
+	public static function unserialize(array $data, callable $unserializeCallback = null): mixed
 	{
 		$unserializeCallback ??= fn (string $data) => unserialize($data);
 

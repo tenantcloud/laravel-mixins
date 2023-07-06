@@ -2,7 +2,6 @@
 
 namespace Tests\Services;
 
-use Generator;
 use stdClass;
 use TenantCloud\Mixins\Services\CacheSerializer;
 use Tests\TestCase;
@@ -12,7 +11,7 @@ use Tests\TestCase;
  */
 class CacheSerializerTest extends TestCase
 {
-	public static function serializesSameDataTwiceUnderTheSameKeyProvider(): Generator
+	public static function serializesDataProvider(): iterable
 	{
 		yield [
 			'64f225676093805c64e7fe5b289434d2a6159094af89e83474328eaf1cf67fa8',
@@ -36,7 +35,7 @@ class CacheSerializerTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider serializesSameDataTwiceUnderTheSameKeyProvider
+	 * @dataProvider serializesDataProvider
 	 */
 	public function testSerializesData(string $expectedKey, object $data): void
 	{

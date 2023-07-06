@@ -82,7 +82,7 @@ class ChunkWithQueueTest extends TestCase
 		$model1 = $this->generateTestModel();
 		$model2 = $this->generateTestModel();
 
-		TestStub::query()->chunkWithQueue(new ItemHandler(static fn ($item) => new SimpleJobWithoutParams($item)));
+		TestStub::query()->chunkWithQueue(new ItemHandler(static fn (TestStub $item) => new SimpleJobWithoutParams($item)));
 
 		foreach ([$model1, $model2] as $model) {
 			$this->assertSame('Job working', $model->refresh()->name);
@@ -172,7 +172,7 @@ class ChunkWithQueueTest extends TestCase
 	}
 
 	/**
-	 * @param null|callable(TestStubFactory $factory):TestStubFactory $callback
+	 * @param callable(TestStubFactory):TestStubFactory|null $callback
 	 */
 	private function generateTestModel(callable $callback = null): TestStub
 	{

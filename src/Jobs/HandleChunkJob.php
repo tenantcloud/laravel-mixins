@@ -4,6 +4,7 @@ namespace TenantCloud\Mixins\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -17,6 +18,8 @@ use Tests\EloquentBuilderMixin\Jobs\HandleChunkJobTest;
 use Webmozart\Assert\Assert;
 
 /**
+ * @template TModel of Model
+ *
  * @see HandleChunkJobTest
  */
 class HandleChunkJob implements ShouldQueue
@@ -28,27 +31,23 @@ class HandleChunkJob implements ShouldQueue
 
 	public const CHUNK_SIZE = 15;
 
-	protected array $itemIds;
-
-	protected Handler $handler;
-
-	protected string $key;
-
-	protected SerializableBuilder $serializedBuilder;
-
-	public function __construct(SerializableBuilder $serializedBuilder, string $key, array $itemIds, Handler $handler)
-	{
+	/**
+	 * @param SerializableBuilder<TModel> $serializedBuilder
+	 * @param array<int|string>           $itemIds
+	 * @param Handler<TModel>             $handler
+	 */
+	public function __construct(
+		private readonly SerializableBuilder $serializedBuilder,
+		private readonly string $key,
+		private readonly array $itemIds,
+		private readonly Handler $handler
+	) {
 		Assert::isAnyOf($handler->getHandler(), [SerializableClosure::class, QueuedChunkHandler::class, QueuedItemHandler::class]);
-
-		$this->serializedBuilder = $serializedBuilder;
-		$this->key = $key;
-		$this->itemIds = $itemIds;
-		$this->handler = $handler;
 	}
 
 	public function handle(): void
 	{
-		$builder = $this->serializedBuilder->getBuilder();
+		$builder = $this->serializedBuilder->builder;
 		$items = $builder->whereIn($this->key, $this->itemIds)->get();
 
 		$handler = $this->handler instanceof ChunkHandler
@@ -56,8 +55,10 @@ class HandleChunkJob implements ShouldQueue
 			: new SimpleQueuedChunkHandler($this->handler->getHandler());
 
 		if (is_callable($handler)) {
+			/* @phpstan-ignore-next-line Refactor handlers to fix these */
 			$handler($items);
 		} else {
+			/* @phpstan-ignore-next-line Refactor handlers to fix these */
 			$handler->handle($items);
 		}
 	}

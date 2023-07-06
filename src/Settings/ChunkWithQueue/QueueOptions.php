@@ -15,7 +15,7 @@ class QueueOptions
 	/** The number of seconds between @see GenerateChunksJob handle */
 	public ?int $delay;
 
-	public function __construct(?string $pieceQueue, ?string $chunkQueue, $delay = null)
+	public function __construct(?string $pieceQueue, ?string $chunkQueue, int $delay = null)
 	{
 		$this->pieceQueue = $pieceQueue;
 		$this->chunkQueue = $chunkQueue;

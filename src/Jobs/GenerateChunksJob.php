@@ -4,6 +4,7 @@ namespace TenantCloud\Mixins\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -11,6 +12,8 @@ use Illuminate\Support\Collection;
 use Tests\EloquentBuilderMixin\Jobs\GenerateChunksJobTest;
 
 /**
+ * @template TModel of Model
+ *
  * @see GenerateChunksJobTest
  */
 class GenerateChunksJob implements ShouldQueue
@@ -22,25 +25,22 @@ class GenerateChunksJob implements ShouldQueue
 
 	public const CHUNK_PIECE = 1000;
 
-	protected SerializableBuilder $serializedBuilder;
-
-	protected ChunkParams $params;
-
-	protected int $chunkNumber;
-
-	public function __construct(SerializableBuilder $serializedBuilder, ChunkParams $params, int $chunkNumber)
-	{
-		$this->serializedBuilder = $serializedBuilder;
-		$this->params = $params;
-		$this->chunkNumber = $chunkNumber;
-	}
+	/**
+	 * @param SerializableBuilder<TModel> $serializedBuilder
+	 * @param ChunkParams<TModel>         $params
+	 */
+	public function __construct(
+		private readonly SerializableBuilder $serializedBuilder,
+		private readonly ChunkParams $params,
+		private readonly int $chunkNumber
+	) {}
 
 	public function handle(): void
 	{
 		$minKeyValue = ($this->chunkNumber - 1) * $this->params->pieceSize + 1;
 		$maxKeyValue = $this->chunkNumber * $this->params->pieceSize;
 
-		$builder = $this->serializedBuilder->getBuilder();
+		$builder = $this->serializedBuilder->builder;
 
 		$builder
 			->whereBetween($this->params->key, [$minKeyValue, $maxKeyValue])

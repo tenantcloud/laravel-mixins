@@ -57,7 +57,10 @@ class HandleChunkJobTest extends TestCase
 		$checkCallback = static function ($items) use ($model) {
 			self::assertInstanceOf(Collection::class, $items);
 			self::assertCount(1, $items);
-			self::assertSame($model->id, $items->first()->id);
+
+			$item = $items->first();
+			self::assertInstanceOf(TestStub::class, $item);
+			self::assertSame($model->id, $item->id);
 		};
 
 		(new HandleChunkJob($serializedBuilder, 'id', [$model->id], new ChunkHandler(new HandlerStub($checkCallback))))->handle();
@@ -88,6 +91,7 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
+		/* @phpstan-ignore-next-line */
 		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler('App\Test')))->handle();
 	}
 
@@ -96,6 +100,7 @@ class HandleChunkJobTest extends TestCase
 		$this->expectException(InvalidArgumentException::class);
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
+		/* @phpstan-ignore-next-line */
 		(new HandleChunkJob($serializedBuilder, 'id', [], new ChunkHandler(TestStub::class)))->handle();
 	}
 }
