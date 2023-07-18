@@ -9,10 +9,8 @@ class CreateTestStubsTable extends Migration
 {
 	/**
 	 * Run the migrations.
-	 *
-	 * @return void
 	 */
-	public function up()
+	public function up(): void
 	{
 		Schema::create('test_stubs', function (Blueprint $table) {
 			$table->bigIncrements('id');
@@ -25,10 +23,8 @@ class CreateTestStubsTable extends Migration
 
 	/**
 	 * Reverse the migrations.
-	 *
-	 * @return void
 	 */
-	public function down()
+	public function down(): void
 	{
 		Schema::dropIfExists('test_stubs');
 	}

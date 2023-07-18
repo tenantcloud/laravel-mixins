@@ -51,7 +51,7 @@ class ArrDotWithDepthTest extends TestCase
 		],
 	];
 
-	public function testItBuildsDotNotatedArrayWithDepthLimitation()
+	public function testItBuildsDotNotatedArrayWithDepthLimitation(): void
 	{
 		$expectation = [
 			'prop'          => 1,
@@ -98,7 +98,7 @@ class ArrDotWithDepthTest extends TestCase
 		$this->assertSame($expectation, Arr::dotWithDepth(self::TESTING_VALUE, '', 2));
 	}
 
-	public function testItBuildsDotNotatedArrayWithDepthLimitationAndPrefix()
+	public function testItBuildsDotNotatedArrayWithDepthLimitationAndPrefix(): void
 	{
 		$expectation = [
 			'prefix.prop'               => 1,

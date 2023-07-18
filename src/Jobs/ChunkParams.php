@@ -2,10 +2,15 @@
 
 namespace TenantCloud\Mixins\Jobs;
 
+use Illuminate\Database\Eloquent\Model;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\Handler;
 
+/**
+ * @template TModel of Model
+ */
 class ChunkParams
 {
+	/** @var Handler<TModel> */
 	public Handler $handler;
 
 	public string $key;
@@ -18,6 +23,9 @@ class ChunkParams
 
 	public ?string $queue;
 
+	/**
+	 * @param Handler<TModel> $handler
+	 */
 	public function __construct(
 		Handler $handler,
 		string $key,

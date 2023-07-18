@@ -16,7 +16,6 @@ class CollectionUngroupTest extends TestCase
 		$collection = $this->collection()->ungroup();
 
 		$this->assertSame(
-			$collection->toArray(),
 			[
 				[
 					'name'  => 'John Doe',
@@ -27,7 +26,8 @@ class CollectionUngroupTest extends TestCase
 						'weight' => 210,
 					],
 				],
-			]
+			],
+			$collection->toArray()
 		);
 	}
 

@@ -2,7 +2,6 @@
 
 namespace Tests\CollectionMixin;
 
-use Generator;
 use Illuminate\Support\Collection;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use Tests\TestCase;
@@ -23,7 +22,7 @@ class CollectionZipByKeyTest extends TestCase
 		);
 	}
 
-	public function zipsByKeyProvider(): Generator
+	public static function zipsByKeyProvider(): iterable
 	{
 		yield 'empty' => [
 			new Collection(),

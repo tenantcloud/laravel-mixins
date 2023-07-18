@@ -31,10 +31,8 @@ class MixinsServiceProvider extends ServiceProvider
 {
 	/**
 	 * Register any application services.
-	 *
-	 * @return void
 	 */
-	public function boot()
+	public function boot(): void
 	{
 		Str::mixin(new StrMixin());
 		Arr::mixin(new ArrMixin());

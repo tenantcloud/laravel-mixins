@@ -4,7 +4,13 @@ namespace TenantCloud\Mixins\Queue\Handlers\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @template TModel of Model
+ */
 interface QueuedItemHandler
 {
-	public function setItem(Model $item): self;
+	/**
+	 * @param TModel $item
+	 */
+	public function setItem(Model $item): static;
 }
