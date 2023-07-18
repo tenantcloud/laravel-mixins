@@ -14,6 +14,7 @@ parameters:
 		- tests
 
 	ignoreErrors:
+		- '#Anonymous function should return Illuminate\\Database\\Eloquent\\Collection but returns Illuminate\\Support\\Collection<\(int\|string\), Illuminate\\Database\\Eloquent\\Model>.#'
 		-
 			message: '#Method Tests\\.*Test::.* (has parameter|return type) .* (does not specify its type|no value type specified).*#i'
 			path: '*Test.php'
