@@ -2,7 +2,6 @@
 
 namespace Tests\EloquentCollectionMixin;
 
-use Generator;
 use Illuminate\Database\Eloquent\Collection;
 use TenantCloud\Mixins\Mixins\EloquentCollectionMixin;
 use Tests\Database\Models\TestStub;
@@ -23,7 +22,7 @@ class EloquentCollectionReplicateTest extends TestCase
 		$this->assertEquals($expected, $result->toArray());
 	}
 
-	public function replicateProvider(): Generator
+	public static function replicateProvider(): iterable
 	{
 		yield 'empty' => [
 			[],
