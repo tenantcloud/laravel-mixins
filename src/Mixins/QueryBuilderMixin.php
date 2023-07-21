@@ -73,7 +73,6 @@ class QueryBuilderMixin
 	 * @deprecated Use Laravel's {@see Builder::lazy()} instead.
 	 *
 	 * Backport of Laravel's lazy. We can't update Laravel due to breaking changes for now.
-	 *
 	 * @see https://github.com/laravel/framework/pull/36699/files#diff-247adb11c1777e45143ee82ce39b4808c7ea072232c1a6bb1bc874c44f22f013R170
 	 * @see QueryBuilderLazyTest
 	 */
