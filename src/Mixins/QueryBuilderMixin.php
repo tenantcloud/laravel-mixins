@@ -18,6 +18,8 @@ use Webmozart\Assert\Assert;
 class QueryBuilderMixin
 {
 	/**
+	 * @deprecated Use Laravel's {@see Builder::toRawSql()} instead.
+	 *
 	 * Same as ->toSql(), but with bindings. For debugging purposes.
 	 */
 	public function toRawSql(): callable
@@ -68,6 +70,8 @@ class QueryBuilderMixin
 	}
 
 	/**
+	 * @deprecated Use Laravel's {@see Builder::lazy()} instead.
+	 *
 	 * Backport of Laravel's lazy. We can't update Laravel due to breaking changes for now.
 	 *
 	 * @see https://github.com/laravel/framework/pull/36699/files#diff-247adb11c1777e45143ee82ce39b4808c7ea072232c1a6bb1bc874c44f22f013R170
@@ -103,7 +107,7 @@ class QueryBuilderMixin
 	/**
 	 * Same as ->whereNested(), except it works with selects, joins, withCounts etc. inside of the callback.
 	 *
-	 * This idea was stolen from {@see Builder::callScope}.
+	 * This idea was stolen from {@see EloquentBuilder::callScope}.
 	 *
 	 * The way it works is the following:
 	 *  1. It saves ->where clauses that exist BEFORE calling a callback.

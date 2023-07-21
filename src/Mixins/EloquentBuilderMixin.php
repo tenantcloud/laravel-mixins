@@ -25,6 +25,8 @@ use Tests\EloquentBuilderMixin\ChunkWithQueueTest;
 class EloquentBuilderMixin extends QueryBuilderMixin
 {
 	/**
+	 * @deprecated Use Laravel's {@see Builder::withExists()} instead.
+	 *
 	 * Same as "->withCount() > 0", but a lot more optimized, as it uses EXISTS clause instead of COUNT().
 	 *
 	 * Example usage:
@@ -94,6 +96,8 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	}
 
 	/**
+	 * @deprecated Use Laravel's {@see Builder::withAggregate()} instead.
+	 *
 	 * Same as ->withCount(), except it allows to use custom aggregate, such as sum(income).
 	 *
 	 * Example usage:
@@ -157,6 +161,8 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	}
 
 	/**
+	 * @deprecated Use Laravel's {@see Builder::withSum()} instead.
+	 *
 	 * Alias for calculating sum using ->withAggregate().
 	 *
 	 * Example usage:
