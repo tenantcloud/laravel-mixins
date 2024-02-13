@@ -46,7 +46,7 @@ class ArrMixin
 	 * 		'leases.*.roommates.*.tenant.userClient'
 	 * ]
 	 */
-	public function select(): callable
+	public function selectWildcard(): callable
 	{
 		return static function ($array, array $keys, bool $keysAlreadyParsed = false) {
 			$result = [];
@@ -69,7 +69,7 @@ class ArrMixin
 				// If the key has a wildcard after and
 				// our dataset value is iterable - map.
 				if ($group !== null && $group !== [null] && is_iterable($value)) {
-					$mapper = static fn ($item) => Arr::select($item, $group);
+					$mapper = static fn ($item) => Arr::selectWildcard($item, $group);
 
 					// array_map doesn't work with Collections and
 					// I don't want to leave type of iterable the same.

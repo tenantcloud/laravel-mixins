@@ -212,6 +212,6 @@ class ArrSelectTest extends TestCase
 
 	protected function assertSelectedTestingValue(array $expected, array $keys): void
 	{
-		$this->assertEquals($expected, Arr::select(self::TESTING_VALUE, $keys));
+		$this->assertEquals($expected, Arr::selectWildcard(self::TESTING_VALUE, $keys));
 	}
 }
