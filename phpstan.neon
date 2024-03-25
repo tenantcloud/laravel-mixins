@@ -1,23 +1,41 @@
 includes:
-	- tools/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- vendor/phpstan/phpstan/conf/bleedingEdge.neon
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-webmozart-assert/extension.neon
+	- vendor/phpstan/phpstan-mockery/extension.neon
+	- vendor/nunomaduro/larastan/extension.neon
 
 parameters:
-	level: 1
+	level: 6
 	tmpDir: ./tmp/phpstan
 
 	paths:
 		- src
+		- tests
 
 	ignoreErrors:
+		- '#Anonymous function should return Illuminate\\Database\\Eloquent\\Collection but returns Illuminate\\Support\\Collection<\(int\|string\), Illuminate\\Database\\Eloquent\\Model>.#'
 		-
-			message: '#Call to an undefined .+#i'
+			message: '#Method Tests\\.*Test::.* (has parameter|return type) .* (does not specify its type|no value type specified).*#i'
+			path: '*Test.php'
+		-
+			message: '#.* does not specify its types.*#i'
+			path: '*Mixin.php'
+		-
+			message: '#.* is not subtype .*#i'
 			path: '*Mixin.php'
 		-
 			message: '#Call to protected method .+#i'
 			path: '*Mixin.php'
 		-
-			message: '#Access to protected property .+Mixin::.+#i'
+			message: '#Access to .* property .+Mixin::.+#i'
 			path: '*Mixin.php'
 		-
-			message: '#Method .+Mixin::.+ invoked with \d parameters, 0 required.#i'
+			message: '#Method .+Mixin::.+ invoked with \d parameters, \d required.#i'
+			path: '*Mixin.php'
+		-
+			message: '#Parameter .* expects .*Mixin.* given#i'
+			path: '*Mixin.php'
+		-
+			message: '#.* should return .* but returns .*Mixin.*#i'
 			path: '*Mixin.php'

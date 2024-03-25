@@ -5,7 +5,11 @@ namespace Tests\EloquentBuilderMixin\Stubs;
 use Illuminate\Support\Collection;
 use Laravel\SerializableClosure\SerializableClosure;
 use TenantCloud\Mixins\Queue\Handlers\Contracts\QueuedChunkHandler;
+use Tests\Database\Models\TestStub;
 
+/**
+ * @template-implements QueuedChunkHandler<TestStub>
+ */
 class HandlerStub implements QueuedChunkHandler
 {
 	protected ?SerializableClosure $callback;

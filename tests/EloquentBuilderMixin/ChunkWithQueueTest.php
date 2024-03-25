@@ -10,6 +10,7 @@ use TenantCloud\Mixins\Mixins\EloquentBuilderMixin;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\ItemHandler;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\ChunkWithQueueSettings;
 use TenantCloud\Mixins\Settings\ChunkWithQueue\QueryOptions;
+use Tests\Database\Factories\TestStubFactory;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerWithConstructorStub;
@@ -81,7 +82,7 @@ class ChunkWithQueueTest extends TestCase
 		$model1 = $this->generateTestModel();
 		$model2 = $this->generateTestModel();
 
-		TestStub::query()->chunkWithQueue(new ItemHandler(static fn ($item) => new SimpleJobWithoutParams($item)));
+		TestStub::query()->chunkWithQueue(new ItemHandler(static fn (TestStub $item) => new SimpleJobWithoutParams($item)));
 
 		foreach ([$model1, $model2] as $model) {
 			$this->assertSame('Job working', $model->refresh()->name);
@@ -103,6 +104,40 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(HandlerStub::class, $settings);
 
 		Queue::assertPushed(GenerateChunksJob::class, 2);
+	}
+
+	public function testWithMaxIdFromBaseQuery(): void
+	{
+		Queue::fake();
+
+		$this->generateTestModel(fn (TestStubFactory $factory) => $factory->hasChildren(TestStubFactory::new()));
+		$this->generateTestModel();
+
+		$settings = ChunkWithQueueSettings::defaultSettings();
+		$settings->chunkOptions->chunkSize = 1;
+		$settings->chunkOptions->pieceSize = 1;
+		$settings->queryOptions = QueryOptions::defaultInstanceWithMaxIdFromBaseQuery();
+
+		TestStub::query()->whereHas('children')->chunkWithQueue(HandlerStub::class, $settings);
+
+		Queue::assertPushed(GenerateChunksJob::class, 3);
+	}
+
+	public function testWithMaxIdFromGivenQuery(): void
+	{
+		Queue::fake();
+
+		$this->generateTestModel(fn (TestStubFactory $factory) => $factory->hasChildren(TestStubFactory::new()));
+		$this->generateTestModel();
+
+		$settings = ChunkWithQueueSettings::defaultSettings();
+		$settings->chunkOptions->chunkSize = 1;
+		$settings->chunkOptions->pieceSize = 1;
+		$settings->queryOptions = QueryOptions::defaultInstance();
+
+		TestStub::query()->whereHas('children')->chunkWithQueue(HandlerStub::class, $settings);
+
+		Queue::assertPushed(GenerateChunksJob::class, 1);
 	}
 
 	public function testJobNotFiredIfNoItemsExisting(): void
@@ -136,12 +171,11 @@ class ChunkWithQueueTest extends TestCase
 		TestStub::query()->chunkWithQueue(TestStub::class);
 	}
 
-	private function generateTestModel(): TestStub
+	/**
+	 * @param callable(TestStubFactory):TestStubFactory|null $callback
+	 */
+	private function generateTestModel(callable $callback = null): TestStub
 	{
-		$model = new TestStub();
-		$model->name = $this->faker->name;
-		$model->save();
-
-		return $model;
+		return with(TestStubFactory::new(), $callback)->create();
 	}
 }

@@ -2,7 +2,6 @@
 
 namespace Tests\CollectionMixin;
 
-use Generator;
 use Illuminate\Support\Collection;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use Tests\TestCase;
@@ -37,7 +36,7 @@ class CollectionFullDiffTest extends TestCase
 		);
 	}
 
-	public function fullDiffProvider(): Generator
+	public static function fullDiffProvider(): iterable
 	{
 		yield 'empty' => [
 			[

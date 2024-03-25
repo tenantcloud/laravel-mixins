@@ -51,7 +51,7 @@ class ArrSelectTest extends TestCase
 		],
 	];
 
-	public function testItSelectsSimpleProperties()
+	public function testItSelectsSimpleProperties(): void
 	{
 		$this->assertSelectedTestingValue([], []);
 
@@ -79,7 +79,7 @@ class ArrSelectTest extends TestCase
 		]);
 	}
 
-	public function testItSelectsNestedProperties()
+	public function testItSelectsNestedProperties(): void
 	{
 		$this->assertSelectedTestingValue([
 			'nested' => [
@@ -113,7 +113,7 @@ class ArrSelectTest extends TestCase
 		]);
 	}
 
-	public function testItSelectsDeepNestedProperties()
+	public function testItSelectsDeepNestedProperties(): void
 	{
 		$this->assertSelectedTestingValue([], [
 			'nested.nested.non_existent',
@@ -132,7 +132,7 @@ class ArrSelectTest extends TestCase
 		]);
 	}
 
-	public function testItSelectsUsingWildcard()
+	public function testItSelectsUsingWildcard(): void
 	{
 		$this->assertSelectedTestingValue([
 			'wildcard' => [
@@ -167,7 +167,7 @@ class ArrSelectTest extends TestCase
 		]);
 	}
 
-	public function testItSelectsUsingNestedWildcard()
+	public function testItSelectsUsingNestedWildcard(): void
 	{
 		$this->assertSelectedTestingValue([
 			'wildcard' => [
@@ -212,6 +212,6 @@ class ArrSelectTest extends TestCase
 
 	protected function assertSelectedTestingValue(array $expected, array $keys): void
 	{
-		$this->assertEquals($expected, Arr::select(self::TESTING_VALUE, $keys));
+		$this->assertEquals($expected, Arr::selectWildcard(self::TESTING_VALUE, $keys));
 	}
 }
