@@ -106,27 +106,29 @@ class ChunkWithQueueTest extends TestCase
 		Queue::assertPushed(GenerateChunksJob::class, 2);
 	}
 
-	public function testWithMaxIdFromBaseQuery(): void
+	public function testGenerateJobsForWholeQuery(): void
 	{
 		Queue::fake();
 
+		$this->generateTestModel();
 		$this->generateTestModel(fn (TestStubFactory $factory) => $factory->hasChildren(TestStubFactory::new()));
 		$this->generateTestModel();
 
 		$settings = ChunkWithQueueSettings::defaultSettings();
 		$settings->chunkOptions->chunkSize = 1;
 		$settings->chunkOptions->pieceSize = 1;
-		$settings->queryOptions = QueryOptions::defaultInstanceWithMaxIdFromBaseQuery();
+		$settings->queryOptions = QueryOptions::defaultInstanceFromWholeTableQuery();
 
 		TestStub::query()->whereHas('children')->chunkWithQueue(HandlerStub::class, $settings);
 
-		Queue::assertPushed(GenerateChunksJob::class, 3);
+		Queue::assertPushed(GenerateChunksJob::class, 4);
 	}
 
 	public function testWithMaxIdFromGivenQuery(): void
 	{
 		Queue::fake();
 
+		$this->generateTestModel();
 		$this->generateTestModel(fn (TestStubFactory $factory) => $factory->hasChildren(TestStubFactory::new()));
 		$this->generateTestModel();
 
