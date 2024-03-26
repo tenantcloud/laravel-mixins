@@ -55,7 +55,6 @@ class HandleChunkJob implements ShouldQueue
 			: new SimpleQueuedChunkHandler($this->handler->getHandler());
 
 		if (is_callable($handler)) {
-			/* @phpstan-ignore-next-line Refactor handlers to fix these */
 			$handler($items);
 		} else {
 			/* @phpstan-ignore-next-line Refactor handlers to fix these */
