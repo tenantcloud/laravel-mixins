@@ -16,6 +16,7 @@ class QueryOptions
 		public readonly string $keyName,
 		string $attributeKeyName = null,
 		public readonly bool $getMaxKeyValueFromNewModelQuery = false,
+		public readonly bool $getMinKeyValueFromNewModelQuery = false,
 	) {
 		$this->attributeKeyName = $attributeKeyName ?? Str::contains($this->keyName, '.')
 				? trim(explode('.', $this->keyName)[1], '\'"')
@@ -27,8 +28,8 @@ class QueryOptions
 		return new self('id');
 	}
 
-	public static function defaultInstanceWithMaxIdFromBaseQuery(): self
+	public static function defaultInstanceFromWholeTableQuery(): self
 	{
-		return new self('id', null, true);
+		return new self('id', null, true, true);
 	}
 }

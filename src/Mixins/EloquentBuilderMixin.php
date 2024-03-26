@@ -282,11 +282,24 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 					->first($settings->queryOptions->keyName)
 			)->{$settings->queryOptions->attributeKeyName};
 
+			$minKeyValue = optional(
+				DB::query()
+					->fromSub(
+						($settings->queryOptions->getMinKeyValueFromNewModelQuery ? $this->getModel()->newQuery() : $this->clone())
+							->toBase()
+							->orderBy($settings->queryOptions->keyName)
+							->limit(1),
+						$this->getModel()->getTable()
+					)
+					->first($settings->queryOptions->keyName)
+			)->{$settings->queryOptions->attributeKeyName} ?? 1;
+
 			if (!$maxKeyValue) {
 				return true;
 			}
 
 			$maxChunkNumber = (int) ceil($maxKeyValue / $settings->chunkOptions->pieceSize);
+			$minChunkNumber = max((int) floor($minKeyValue / $settings->chunkOptions->pieceSize), 1);
 
 			$params = new ChunkParams(
 				$handler,
@@ -299,7 +312,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$builder = new SerializableBuilder($query);
 
-			for ($chunkNumber = 1; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
+			for ($chunkNumber = $minChunkNumber; $chunkNumber <= $maxChunkNumber; $chunkNumber++) {
 				dispatch(new GenerateChunksJob($builder, $params, $chunkNumber))
 					->onQueue($settings->queueOptions->pieceQueue)
 					->delay($settings->queueOptions->delay ? $settings->queueOptions->delay * ($chunkNumber - 1) : null);

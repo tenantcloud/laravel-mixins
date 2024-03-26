@@ -28,7 +28,7 @@ parameters:
 			message: '#Call to protected method .+#i'
 			path: '*Mixin.php'
 		-
-			message: '#Access to .* property .+Mixin::.+#i'
+			message: '#Access to .* property .+Mixin.*::.+#i'
 			path: '*Mixin.php'
 		-
 			message: '#Method .+Mixin::.+ invoked with \d parameters, \d required.#i'
