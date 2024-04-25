@@ -5,6 +5,7 @@ Laravel mixins collection.
 ## Installation
 
 In your `composer.json`, add this repository:
+
 ```
 "repositories": [
     {
@@ -13,4 +14,5 @@ In your `composer.json`, add this repository:
     }
 ],
 ```
+
 Then do `composer require tenantcloud/laravel-mixins` to install the package.
