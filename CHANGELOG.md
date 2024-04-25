@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/tenantcloud/laravel-mixins/compare/v3.0.1...v3.1.0) (2024-04-25)
+
+
+### Features
+
+* Template sync ([#31](https://github.com/tenantcloud/laravel-mixins/issues/31)) ([f97041d](https://github.com/tenantcloud/laravel-mixins/commit/f97041d53fc12ca75c61bcffc897244d7c0c11c8)), closes [#30](https://github.com/tenantcloud/laravel-mixins/issues/30)
+
 ## [3.0.1](https://github.com/tenantcloud/laravel-mixins/compare/v3.0.0...v3.0.1) (2024-03-26)
 
 
