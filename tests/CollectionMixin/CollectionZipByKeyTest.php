@@ -3,6 +3,7 @@
 namespace Tests\CollectionMixin;
 
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use Tests\TestCase;
 
@@ -11,9 +12,7 @@ use Tests\TestCase;
  */
 class CollectionZipByKeyTest extends TestCase
 {
-	/**
-	 * @dataProvider zipsByKeyProvider
-	 */
+	#[DataProvider('zipsByKeyProvider')]
 	public function testZipsByKey(Collection $expected, Collection $first, Collection $second): void
 	{
 		$this->assertSame(
