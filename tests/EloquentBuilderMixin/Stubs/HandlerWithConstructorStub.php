@@ -14,12 +14,7 @@ class HandlerWithConstructorStub implements QueuedChunkHandler
 {
 	public static ?self $calledThis = null;
 
-	public Carbon $date;
-
-	public function __construct(Carbon $date)
-	{
-		$this->date = $date;
-	}
+	public function __construct(public Carbon $date) {}
 
 	public function handle(Collection $items): void
 	{

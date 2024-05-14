@@ -259,7 +259,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 		/* @param string|callable|ChunkHandler|ItemHandler $handler */
 		return function (
 			$handler,
-			ChunkWithQueueSettings $settings = null
+			?ChunkWithQueueSettings $settings = null
 		) {
 			if (!$settings) {
 				$settings = ChunkWithQueueSettings::defaultSettings();
@@ -267,7 +267,7 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			$handler = is_object($handler) && is_a($handler, Handler::class) ? $handler : new ChunkHandler($handler);
 
-			/* @var Builder $query */
+			/** @var Builder $query */
 			$query = clone $this;
 
 			$maxKeyValue = optional(

@@ -109,7 +109,7 @@ class CollectionMixin
 		 *                                                   Second - elements in both collection
 		 *                                                   Third - elements not in first, but in second collection
 		 */
-		return function ($other, callable $localKey, callable $foreignKey = null): array {
+		return function ($other, callable $localKey, ?callable $foreignKey = null): array {
 			/** @var Collection $this */
 			$other = Collection::wrap($other);
 			$foreignKey ??= $localKey;

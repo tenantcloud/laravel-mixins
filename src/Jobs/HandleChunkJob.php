@@ -33,7 +33,7 @@ class HandleChunkJob implements ShouldQueue
 
 	/**
 	 * @param SerializableBuilder<TModel> $serializedBuilder
-	 * @param array<int|string>           $itemIds
+	 * @param list<int|string>            $itemIds
 	 * @param Handler<TModel>             $handler
 	 */
 	public function __construct(
