@@ -17,6 +17,7 @@ class CreateTestStubsTable extends Migration
 			$table->foreignIdFor(TestStub::class, 'parent_id')
 				->nullable();
 			$table->string('name');
+			$table->text('description');
 			$table->timestamps();
 		});
 	}

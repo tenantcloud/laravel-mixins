@@ -9,6 +9,7 @@ use Mockery\MockInterface;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
+use Tests\Database\Factories\TestStubFactory;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -48,9 +49,7 @@ class HandleChunkJobTest extends TestCase
 
 	public function testFireHandleWithItem(): void
 	{
-		$model = new TestStub();
-		$model->name = $this->faker->name;
-		$model->save();
+		$model = TestStubFactory::new()->create();
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 
@@ -68,13 +67,8 @@ class HandleChunkJobTest extends TestCase
 
 	public function testFireHandleWithMultipleItems(): void
 	{
-		$model = new TestStub();
-		$model->name = $this->faker->name;
-		$model->save();
-
-		$model2 = new TestStub();
-		$model2->name = $this->faker->name;
-		$model2->save();
+		$model = TestStubFactory::new()->create();
+		$model2 = TestStubFactory::new()->create();
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 

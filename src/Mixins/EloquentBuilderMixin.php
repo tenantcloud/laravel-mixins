@@ -175,33 +175,6 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 	}
 
 	/**
-	 * Used for mass update with switch cases
-	 */
-	public function conditionalUpdate(): callable
-	{
-		return function (string $changedField, string $caseField, array $cases) {
-			$this->whereIn($caseField, array_keys($cases));
-
-			$query = $this->getQuery();
-
-			$caseSql = $query->grammar->compileCase($cases, $caseField);
-
-			$sql = $query->grammar->compileUpdate($query, [
-				$changedField => new Expression($caseSql),
-			]);
-
-			$bindings = collect($cases)
-				->flatMap(static fn ($value, $key) => [$key, $value])
-				->all();
-
-			return $query->connection->update(
-				$sql,
-				$query->grammar->prepareBindingsForUpdate($query->bindings, $bindings)
-			);
-		};
-	}
-
-	/**
 	 * @see QueryBuilderMixin::customWhereNested()
 	 */
 	public function customWhereNested(): callable
@@ -332,5 +305,13 @@ class EloquentBuilderMixin extends QueryBuilderMixin
 
 			return $this;
 		};
+	}
+
+	/**
+	 * @see QueryBuilderMixin::conditionalUpdate()
+	 */
+	public function conditionalUpdate(): callable
+	{
+		return fn (string $changedField, string $caseField, array $cases) => $this->getQuery()->conditionalUpdate($changedField, $caseField, $cases);
 	}
 }

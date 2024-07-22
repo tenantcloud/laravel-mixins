@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int    $parent_id
  * @property string $name
+ * @property string $description
  * @property Carbon $updated_at
  */
 class TestStub extends Model
@@ -17,6 +18,7 @@ class TestStub extends Model
 
 	protected $fillable = [
 		'name',
+		'description',
 	];
 
 	/**

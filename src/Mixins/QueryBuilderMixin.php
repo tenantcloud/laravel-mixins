@@ -176,4 +176,29 @@ class QueryBuilderMixin
 			return $this;
 		};
 	}
+
+	/**
+	 * Used for mass update with switch cases
+	 */
+	public function conditionalUpdate(): callable
+	{
+		return function (string $changedField, string $caseField, array $cases) {
+			$this->whereIn($caseField, array_keys($cases));
+
+			$caseSql = $this->grammar->compileCase($cases, $caseField);
+
+			$sql = $this->grammar->compileUpdate($this, [
+				$changedField => new Expression($caseSql),
+			]);
+
+			$bindings = collect($cases)
+				->flatMap(static fn ($value, $key) => [$key, $value])
+				->all();
+
+			return $this->connection->update(
+				$sql,
+				$this->grammar->prepareBindingsForUpdate($this->bindings, $bindings)
+			);
+		};
+	}
 }
