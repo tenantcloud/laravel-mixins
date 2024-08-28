@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/tenantcloud/laravel-mixins/compare/v3.1.0...v3.2.0) (2024-08-28)
+
+
+### Features
+
+* Move conditionalUpdate to regular query builder ([#37](https://github.com/tenantcloud/laravel-mixins/issues/37)) ([66f7fe9](https://github.com/tenantcloud/laravel-mixins/commit/66f7fe99f89d025c5f2e0c5bc3863e53898405e2))
+
 # [3.1.0](https://github.com/tenantcloud/laravel-mixins/compare/v3.0.1...v3.1.0) (2024-04-25)
 
 
