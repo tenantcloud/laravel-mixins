@@ -9,6 +9,7 @@ use TenantCloud\Mixins\Jobs\GenerateChunksJob;
 use TenantCloud\Mixins\Jobs\HandleChunkJob;
 use TenantCloud\Mixins\Jobs\SerializableBuilder;
 use TenantCloud\Mixins\Queue\Handlers\Serializable\ChunkHandler;
+use Tests\Database\Factories\TestStubFactory;
 use Tests\Database\Models\TestStub;
 use Tests\EloquentBuilderMixin\Stubs\HandlerStub;
 use Tests\TestCase;
@@ -41,9 +42,8 @@ class GenerateChunksJobTest extends TestCase
 	public function testCalculateMinMaxPrimaryKeyValue(): void
 	{
 		Queue::fake();
-		$model = new TestStub();
-		$model->name = $this->faker->name;
-		$model->save();
+
+		TestStubFactory::new()->create();
 
 		$serializedBuilder = new SerializableBuilder(TestStub::query());
 		$params = new ChunkParams(
