@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/tenantcloud/laravel-mixins/compare/v3.2.0...v3.2.1) (2024-09-12)
+
+
+### Bug Fixes
+
+* Fixed chunk with queue delay ([#38](https://github.com/tenantcloud/laravel-mixins/issues/38)) ([43e7963](https://github.com/tenantcloud/laravel-mixins/commit/43e79635b92430c043fc0d174d193a1b6d3e6a08))
+
 # [3.2.0](https://github.com/tenantcloud/laravel-mixins/compare/v3.1.0...v3.2.0) (2024-08-28)
 
 
