@@ -18,6 +18,6 @@ class EloquentCollectionMixin
 	 */
 	public function replicate(): callable
 	{
-		return fn (array $except = null): Collection => $this->map(fn (Model $model) => $model->replicate($except));
+		return fn (?array $except = null): Collection => $this->map(fn (Model $model) => $model->replicate($except));
 	}
 }

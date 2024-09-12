@@ -14,7 +14,7 @@ class QueryOptions
 	 */
 	public function __construct(
 		public readonly string $keyName,
-		string $attributeKeyName = null,
+		?string $attributeKeyName = null,
 		public readonly bool $getMaxKeyValueFromNewModelQuery = false,
 		public readonly bool $getMinKeyValueFromNewModelQuery = false,
 	) {

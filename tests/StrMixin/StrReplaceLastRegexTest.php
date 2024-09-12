@@ -3,15 +3,14 @@
 namespace Tests\StrMixin;
 
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
 
 /** @see StrMixin::replaceLastRegex() */
 class StrReplaceLastRegexTest extends TestCase
 {
-	/**
-	 * @dataProvider replacesLastRegexProvider
-	 */
+	#[DataProvider('replacesLastRegexProvider')]
 	public function testReplacesLastRegex(string $expected, string $input, int $skip): void
 	{
 		self::assertSame(

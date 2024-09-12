@@ -176,7 +176,7 @@ class ChunkWithQueueTest extends TestCase
 	/**
 	 * @param callable(TestStubFactory):TestStubFactory|null $callback
 	 */
-	private function generateTestModel(callable $callback = null): TestStub
+	private function generateTestModel(?callable $callback = null): TestStub
 	{
 		return with(TestStubFactory::new(), $callback)->create();
 	}

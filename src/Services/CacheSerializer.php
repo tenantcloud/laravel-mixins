@@ -19,7 +19,7 @@ class CacheSerializer
 	 *
 	 * @return array{ key: string }
 	 */
-	public static function serialize(mixed $object, callable $serializeCallback = null): array
+	public static function serialize(mixed $object, ?callable $serializeCallback = null): array
 	{
 		$serializeCallback ??= fn ($object) => serialize($object);
 		$serialized = $serializeCallback($object);
@@ -45,7 +45,7 @@ class CacheSerializer
 	 *
 	 * @return TObject
 	 */
-	public static function unserialize(array $data, callable $unserializeCallback = null): mixed
+	public static function unserialize(array $data, ?callable $unserializeCallback = null): mixed
 	{
 		$unserializeCallback ??= fn (string $data) => unserialize($data);
 
