@@ -6,7 +6,7 @@
 		"php": ">=8.2",
 		"illuminate/database": "^9.0|^10.0",
 		"illuminate/auth": "^9.0|^10.0",
-		"illuminate/support": "^9.0|^10.0",
+		"illuminate/support": "^9.0|^10.0|^11.0",
 		"webmozart/assert": "^1.9",
 		"anourvalar/eloquent-serialize": "^1.2",
 		"laravel/serializable-closure": "^1.1",
