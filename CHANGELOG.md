@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/tenantcloud/laravel-mixins/compare/v3.2.1...v3.2.2) (2025-06-11)
+
+
+### Bug Fixes
+
+* Added support laravel 11 ([#39](https://github.com/tenantcloud/laravel-mixins/issues/39)) ([4a67704](https://github.com/tenantcloud/laravel-mixins/commit/4a677042dd809a5411095d5f73ad783f8ae8a34e))
+
 ## [3.2.1](https://github.com/tenantcloud/laravel-mixins/compare/v3.2.0...v3.2.1) (2024-09-12)
 
 
