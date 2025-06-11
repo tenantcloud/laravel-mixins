@@ -10,7 +10,7 @@
 		"webmozart/assert": "^1.9",
 		"anourvalar/eloquent-serialize": "^1.2",
 		"laravel/serializable-closure": "^1.1",
-		"illuminate/contracts": "^10.0"
+		"illuminate/contracts": "^10.0|^11.0"
 	},
 	"require-dev": {
 		"pestphp/pest": "^2.8",
