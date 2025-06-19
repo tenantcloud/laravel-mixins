@@ -38,3 +38,6 @@ parameters:
 		-
 			message: '#.* should return .* but returns .*Mixin.*#i'
 			path: '*Mixin.php'
+		-
+			message: '#Unable to resolve the template type TNewKey.*keyBy\(\)#'
+			path: '*Mixin.php'
