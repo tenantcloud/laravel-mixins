@@ -7,17 +7,12 @@ use TenantCloud\Mixins\Jobs\HandleChunkJob;
 
 class ChunkOptions
 {
-	/** Number of items that included into single chunk job. */
-	public int $chunkSize;
-
-	/** Number of items that included into generate chunk jobs job. */
-	public int $pieceSize;
-
-	public function __construct(int $chunkSize, int $pieceSize)
-	{
-		$this->chunkSize = $chunkSize;
-		$this->pieceSize = $pieceSize;
-	}
+	public function __construct(
+		/** Number of items that included into single chunk job. */
+		public int $chunkSize,
+		/** Number of items that included into generate chunk jobs job. */
+		public int $pieceSize
+	) {}
 
 	public static function defaultInstance(): self
 	{

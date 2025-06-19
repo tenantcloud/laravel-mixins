@@ -2,6 +2,7 @@
 
 namespace Tests\Services;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use TenantCloud\Mixins\Services\CacheSerializer;
 use Tests\TestCase;
@@ -34,9 +35,7 @@ class CacheSerializerTest extends TestCase
 		];
 	}
 
-	/**
-	 * @dataProvider serializesDataProvider
-	 */
+	#[DataProvider('serializesDataProvider')]
 	public function testSerializesData(string $expectedKey, object $data): void
 	{
 		self::assertSame($expectedKey, CacheSerializer::serialize($data)['key']);

@@ -3,6 +3,7 @@
 namespace Tests\CollectionMixin;
 
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\Mixins\Mixins\CollectionMixin;
 use Tests\TestCase;
 
@@ -11,9 +12,7 @@ use Tests\TestCase;
  */
 class CollectionFullDiffTest extends TestCase
 {
-	/**
-	 * @dataProvider fullDiffProvider
-	 */
+	#[DataProvider('fullDiffProvider')]
 	public function testFullDiff(array $expected, Collection $first, Collection $second): void
 	{
 		[$onlyFirst, $both, $onlySecond] = $first->fullDiff(

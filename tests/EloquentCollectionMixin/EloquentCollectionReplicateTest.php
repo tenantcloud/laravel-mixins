@@ -3,6 +3,7 @@
 namespace Tests\EloquentCollectionMixin;
 
 use Illuminate\Database\Eloquent\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\Mixins\Mixins\EloquentCollectionMixin;
 use Tests\Database\Models\TestStub;
 use Tests\TestCase;
@@ -12,10 +13,8 @@ use Tests\TestCase;
  */
 class EloquentCollectionReplicateTest extends TestCase
 {
-	/**
-	 * @dataProvider replicateProvider
-	 */
-	public function testReplicate(array $expected, Collection $collection, array $except = null): void
+	#[DataProvider('replicateProvider')]
+	public function testReplicate(array $expected, Collection $collection, ?array $except = null): void
 	{
 		$result = $collection->replicate($except);
 
