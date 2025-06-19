@@ -337,7 +337,7 @@ class ArrMixin
 	 */
 	public function dotWithDepth(): callable
 	{
-		return static function (array $array, $prepend = '', int $depth = null): array {
+		return static function (array $array, $prepend = '', ?int $depth = null): array {
 			$results = [];
 
 			foreach ($array as $key => $value) {
