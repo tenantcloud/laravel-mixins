@@ -8,7 +8,7 @@ includes:
 parameters:
 	level: 6
 	tmpDir: ./tmp/phpstan
-	reportUnmatchedErrors: false
+	reportUnmatchedIgnoredErrors: false
 
 	paths:
 		- src
