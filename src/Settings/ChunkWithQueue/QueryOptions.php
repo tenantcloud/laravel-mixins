@@ -19,7 +19,7 @@ class QueryOptions
 		public readonly bool $getMinKeyValueFromNewModelQuery = false,
 	) {
 		$this->attributeKeyName = $attributeKeyName ?? Str::contains($this->keyName, '.')
-				? trim(explode('.', $this->keyName)[1], '\'"')
+				? mb_trim(explode('.', $this->keyName)[1], '\'"')
 				: $this->keyName;
 	}
 
