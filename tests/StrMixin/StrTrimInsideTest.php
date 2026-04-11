@@ -6,7 +6,9 @@ use Illuminate\Support\Str;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
 
-/** @see StrMixin::insideTrim */
+/**
+ * @see StrMixin::insideTrim
+ */
 class StrTrimInsideTest extends TestCase
 {
 	public function testItTrimsTheStringFromInside(): void

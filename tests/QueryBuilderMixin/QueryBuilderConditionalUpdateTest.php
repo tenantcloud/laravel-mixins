@@ -8,7 +8,9 @@ use Tests\Database\Factories\TestStubFactory;
 use Tests\Database\Models\TestStub;
 use Tests\TestCase;
 
-/** @see QueryBuilderMixin::conditionalUpdate() */
+/**
+ * @see QueryBuilderMixin::conditionalUpdate()
+ */
 class QueryBuilderConditionalUpdateTest extends TestCase
 {
 	use RefreshDatabase;

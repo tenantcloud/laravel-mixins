@@ -7,7 +7,9 @@ use TenantCloud\Mixins\Mixins\HasOneOrManyMixin;
 use Tests\Database\Factories\TestStubFactory;
 use Tests\TestCase;
 
-/** @see HasOneOrManyMixin::disassociate() */
+/**
+ * @see HasOneOrManyMixin::disassociate()
+ */
 class DisassociateTest extends TestCase
 {
 	use RefreshDatabase;

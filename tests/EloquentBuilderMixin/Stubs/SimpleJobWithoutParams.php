@@ -7,9 +7,7 @@ use Tests\Database\Models\TestStub;
 
 class SimpleJobWithoutParams implements ShouldQueue
 {
-	public function __construct(
-		public readonly TestStub $item
-	) {}
+	public function __construct(public readonly TestStub $item) {}
 
 	public function handle(): void
 	{
