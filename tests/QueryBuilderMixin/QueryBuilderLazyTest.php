@@ -8,7 +8,9 @@ use Illuminate\Support\LazyCollection;
 use TenantCloud\Mixins\QueryBuilderMixin;
 use Tests\TestCase;
 
-/** @see QueryBuilderMixin::lazy() */
+/**
+ * @see QueryBuilderMixin::lazy()
+ */
 class QueryBuilderLazyTest extends TestCase
 {
 	use RefreshDatabase;

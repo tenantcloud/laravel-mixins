@@ -15,9 +15,7 @@ class SerializableBuilder
 	/**
 	 * @param Builder<TModel> $builder
 	 */
-	public function __construct(
-		public readonly Builder $builder
-	) {}
+	public function __construct(public readonly Builder $builder) {}
 
 	public function __serialize(): array
 	{

@@ -19,9 +19,7 @@ class SimpleQueuedChunkHandler implements QueuedChunkHandler
 	/**
 	 * @param QueuedItemHandler<TModel>|callable(TModel): mixed $itemHandler
 	 */
-	public function __construct(
-		private readonly mixed $itemHandler
-	) {}
+	public function __construct(private readonly mixed $itemHandler) {}
 
 	public function handle(Collection $items): void
 	{

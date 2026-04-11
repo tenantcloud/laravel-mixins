@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\DB;
 use TenantCloud\Mixins\QueryBuilderMixin;
 use Tests\TestCase;
 
-/** @see QueryBuilderMixin::customWhereNested() */
+/**
+ * @see QueryBuilderMixin::customWhereNested()
+ */
 class QueryBuilderCustomWhereNestedTest extends TestCase
 {
 	use RefreshDatabase;

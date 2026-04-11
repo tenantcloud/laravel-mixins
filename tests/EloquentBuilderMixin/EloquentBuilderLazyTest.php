@@ -8,7 +8,9 @@ use TenantCloud\Mixins\QueryBuilderMixin;
 use Tests\Database\Models\TestStub;
 use Tests\TestCase;
 
-/** @see QueryBuilderMixin::lazy() */
+/**
+ * @see QueryBuilderMixin::lazy()
+ */
 class EloquentBuilderLazyTest extends TestCase
 {
 	use RefreshDatabase;

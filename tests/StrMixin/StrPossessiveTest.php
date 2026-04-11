@@ -7,7 +7,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
 
-/** @see StrMixin::possessive() */
+/**
+ * @see StrMixin::possessive()
+ */
 class StrPossessiveTest extends TestCase
 {
 	#[DataProvider('replacesLastRegexProvider')]

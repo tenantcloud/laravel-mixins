@@ -6,7 +6,9 @@ use Illuminate\Support\Str;
 use TenantCloud\Mixins\Mixins\StrMixin;
 use Tests\TestCase;
 
-/** @see StrMixin::uniqueRandom */
+/**
+ * @see StrMixin::uniqueRandom
+ */
 class StrUniqueRandomTest extends TestCase
 {
 	public function testStringIsOfGivenLength(): void

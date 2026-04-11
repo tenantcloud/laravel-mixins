@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\DB;
 use TenantCloud\Mixins\QueryBuilderMixin;
 use Tests\TestCase;
 
-/** @see QueryBuilderMixin::whereSubOther() */
+/**
+ * @see QueryBuilderMixin::whereSubOther()
+ */
 class QueryBuilderWhereSubOtherTest extends TestCase
 {
 	use RefreshDatabase;
