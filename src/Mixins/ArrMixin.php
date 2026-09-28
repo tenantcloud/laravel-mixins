@@ -342,7 +342,7 @@ class ArrMixin
 
 			foreach ($array as $key => $value) {
 				if (is_array($value) && !empty($value) && ($depth === null || ($depth - 1) > 0)) {
-					$results = array_merge($results, Arr::dotWithDepth($value, $prepend . $key . '.', $depth - 1));
+					$results = array_merge($results, Arr::dotWithDepth($value, $prepend . $key . '.', $depth === null ? null : $depth - 1));
 				} else {
 					$results[$prepend . $key] = $value;
 				}

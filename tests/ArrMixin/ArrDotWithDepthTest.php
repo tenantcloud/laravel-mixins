@@ -136,4 +136,16 @@ class ArrDotWithDepthTest extends TestCase
 
 		$this->assertSame($expectation, Arr::dotWithDepth(self::TESTING_VALUE, 'prefix.', 3));
 	}
+
+	public function testItBuildsFullyDotNotatedArrayWithoutDepthLimitation(): void
+	{
+		$this->assertSame(Arr::dot(self::TESTING_VALUE), Arr::dotWithDepth(self::TESTING_VALUE));
+		$this->assertSame(Arr::dot(self::TESTING_VALUE, 'prefix.'), Arr::dotWithDepth(self::TESTING_VALUE, 'prefix.'));
+		$this->assertSame(['a.b.c.d' => 1], Arr::dotWithDepth(['a' => ['b' => ['c' => ['d' => 1]]]]));
+	}
+
+	public function testItDoesNotFlattenNestedArraysWithDepthOfOne(): void
+	{
+		$this->assertSame(['nested' => ['prop' => 1]], Arr::dotWithDepth(['nested' => ['prop' => 1]], '', 1));
+	}
 }
